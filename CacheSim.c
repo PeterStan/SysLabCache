@@ -24,7 +24,7 @@ int readTrace(char *file){
 
 //Takes the base-two log of the address passed 
 int logBaseTwo(int quantity){
-	assert(quantity!=NULL);
+	assert(quantity>0);
 	int x = 0;
 	int quotient = quantity/(2^x);
 	while(quotient>1){
@@ -90,7 +90,10 @@ int updateOnMiss(){
 	//run file >a.out K L C traceFile
 int main(int argc, char *argv[]){
 	int hitRate;
-	assert((argv[1]!=NULL)&&(argv[2]!=NULL)&&(argv[3]!=NULL)&&(argv[4]!=NULL);
+	assert(argv[1]>0);
+	assert(argv[2]>0);
+	assert(arvg[3]>0);
+	assert(argv[4]>0);
 
 
 
