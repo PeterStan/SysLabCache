@@ -7,15 +7,13 @@
 
 //takes trace file and returns hit rate
 int readTrace(char *file){
+	 
+	unsigned int address;
 	FILE *fp;
-	unsigned int *address;
-
 	fp = fopen(file, "r+");
-	printf("File opened, from %s \n", file);
 
-	while( fscanf(fp, "%X", address) != EOF){
-		printf("%X\n", *address);
-		accessCache(*address);
+	while( fscanf(fp, "%X", &address) != EOF){
+		accessCache(address);//printf("%X\n", address);
 	}
 
 	fclose(fp);
