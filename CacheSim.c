@@ -52,14 +52,19 @@ int buildCache(int k, int l, int c){
 }
 
 //Outputs the number of bits in the set index  field of theaddress
-int setIndexLength(){
-	//poop
-	return 0;
+int setIndexLength(int k, int l, int c){
+	int setLength = logBaseTwo(c/(l*k));
+	int offsetSize = logBaseTwo(k);
+	assert((32 - setLength - offsetSize) > 0);
+	return setLength;
 }
 
 //Outputs  the  number  of  bits  in  the  line  o set field  of  the address
-int offsetLength(){
-	return 0;
+int offsetLength(int k, int l, int c){
+	int setLength = logBaseTwo(c/(l*k));
+	int offsetSize = logBaseTwo(k);
+	assert((32 - setLength - offsetSize) > 0);
+	return offsetSize;
 }
 
 //Outputs the tag bits associated with the address
