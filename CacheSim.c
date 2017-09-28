@@ -69,6 +69,7 @@ int offsetLength(int k, int l, int c){
 
 //Outputs the tag bits associated with the address
 int tagBits(int address, int offset, int setIndex){
+	unsigned int tag;
 	assert((offset + setIndex) < 32); 
 	tag = (unsigned)address;
 	tag = tag >> (offset + setIndex);
