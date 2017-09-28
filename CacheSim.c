@@ -62,7 +62,7 @@ int offsetLength(int k, int l, int c){
 	int setLength = logBaseTwo(c/(l*k));
 	int offsetSize = logBaseTwo(k);
 	assert((32 - setLength - offsetSize) > 0);
-	return offsetSize;
+	return offsetSize; 
 }
 
 //Outputs the tag bits associated with the address
