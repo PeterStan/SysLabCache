@@ -95,19 +95,20 @@ int updateOnMiss(){
 	//run file >a.out K L C traceFile
 int main(int argc, char *argv[]){
 	int hitRate;int k, l, c;
-	k = (int) argv[1];l = (int) argv[2];c = (int) argv[3];
 	assert(argv[1]>0);
 	assert(argv[2]>0);
 	assert(argv[3]>0);
 	assert(argv[4]>0);
-	
+	k = *argv[1]-48;l = *argv[2]-48;c = *argv[3]-48;
+
+	/*
 	struct chache theCache;
-	theCache.setNumFieldLength = setIndexLength(argv[1],argv[2],argv[3]);
-	theCache.blockOffsetFieldLength = offsetLength(arvg[1],argv[2],argv[3]);
+	theCache.setNumFieldLength = setIndexLength(k,l,c);
+	theCache.blockOffsetFieldLength = offsetLength(k,l,c);
+	*/
 
 
-
-	printf("Start, %d arguements: K:%d, L:%d, C:%d File:%s \n", argc, *argv[1], *argv[2], *argv[3], argv[4]);
+	printf("Start, %d arguements: K:%d, L:%d, C:%d File:%s \n", argc, k, *argv[2], *argv[3], argv[4]);
 	
 
 	hitRate = readTrace(argv[4]);//gives segfault
