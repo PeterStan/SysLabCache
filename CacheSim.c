@@ -68,8 +68,11 @@ int offsetLength(int k, int l, int c){
 }
 
 //Outputs the tag bits associated with the address
-int tagBits(){
-	return 0;
+int tagBits(int address, int offset, int setIndex){
+	assert((offset + setIndex) < 32); 
+	tag = (unsigned)address;
+	tag = tag >> (offset + setIndex);
+	return tag;
 }
 
 // If there is a hit, this outputs the cache way in which the accessed line can be found; 
