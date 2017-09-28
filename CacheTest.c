@@ -1,5 +1,5 @@
 #include <assert.h>
-//#include "CacheSim.c"
+#include "CacheSim.c"
 
 int whichSetTest(){
 	assert(whichSet() == 0);

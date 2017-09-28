@@ -10,8 +10,6 @@ unsigned int **tagArray;
 int **lruArray;
 };
 
-FILE* traceFP;
-
 char* getNextAddress();
 int whichSet();
 int setIndexLength();
