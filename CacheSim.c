@@ -11,11 +11,11 @@ int readTrace(char *file){
 	FILE *fp;
 	unsigned int *address;
 
-	fp = fopen(file, "r");
+	fp = fopen(file, "r+");
 
 
 	while( fscanf(fp, "%X", address) != EOF){
-		printf("%X \n", *address);
+		printf("%X\n", *address);
 		accessCache(*address);
 	}
 
@@ -92,7 +92,7 @@ int main(int argc, char *argv[]){
 	int hitRate;
 	assert(argv[1]>0);
 	assert(argv[2]>0);
-	assert(arvg[3]>0);
+	assert(argv[3]>0);
 	assert(argv[4]>0);
 
 
