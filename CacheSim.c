@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <assert.h>
+#include <stdlib.h>
 #include "Cache.h"
 //#include "CacheTest.c"
 
@@ -96,21 +97,23 @@ int updateOnMiss(){
 	//run file >a.out K L C traceFile
 int main(int argc, char *argv[]){
 	int hitRate;int k, l, c;
+	/*
 	assert(argv[1]>0);
 	assert(argv[2]>0);
 	assert(argv[3]>0);
 	assert(argv[4]>0);
-	k = *argv[1]-48;l = *argv[2]-48;c = *argv[3]-48;
+	*/
+	k = atoi(argv[1]); l = atoi(argv[2]); c = (*argv[3])-48;
 
-	
-	struct cache theCache;
-	theCache.setNumFieldLength = setIndexLength(k,l,c);
-	theCache.blockOffsetFieldLength = offsetLength(k,l,c);
-	theCache.tagFieldLength = (32 - theCache.setNumFieldLength - theCache.blockOffsetFieldLength);
-	
+	/*
+	struct cache Cache;
+	Cache.setNumFieldLength = setIndexLength(k,l,c);
+	Cache.blockOffsetFieldLength = offsetLength(k,l,c);
+	Cache.tagFieldLength = (32 - Cache.setNumFieldLength - Cache.blockOffsetFieldLength);
+	*/
 
 
-	printf("Start, %d arguements: K:%d, L:%d, C:%d File:%s \n", argc, k, *argv[2], *argv[3], argv[4]);
+	printf("Start, %d arguements: K:%d, L:%d, C:%d File: %s \n", argc, k, l, c, argv[4]);
 	
 
 	hitRate = readTrace(argv[4]);//gives segfault
