@@ -20,4 +20,4 @@ int updateOnHit();
 int updateOnMiss();
 int readTrace();
 int accessCache();
-int buildCache(int k, int l, int c);
+int buildCache();

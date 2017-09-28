@@ -105,11 +105,11 @@ int main(int argc, char *argv[]){
 	assert(argv[4]>0);
 	k = *argv[1]-48;l = *argv[2]-48;c = *argv[3]-48;
 
-	/*
-	struct chache theCache;
+	
+	struct cache theCache;
 	theCache.setNumFieldLength = setIndexLength(k,l,c);
 	theCache.blockOffsetFieldLength = offsetLength(k,l,c);
-	*/
+	
 
 
 	printf("Start, %d arguements: K:%d, L:%d, C:%d File:%s \n", argc, k, *argv[2], *argv[3], argv[4]);
