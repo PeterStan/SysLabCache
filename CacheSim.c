@@ -108,6 +108,7 @@ int main(int argc, char *argv[]){
 	struct cache theCache;
 	theCache.setNumFieldLength = setIndexLength(k,l,c);
 	theCache.blockOffsetFieldLength = offsetLength(k,l,c);
+	theCache.tagFieldLength = (32 - theCache.setNumFieldLength - theCache.blockOffsetFieldLength);
 	
 
 
