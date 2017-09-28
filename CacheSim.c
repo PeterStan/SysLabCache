@@ -94,7 +94,8 @@ int updateOnMiss(){
 	//argv[3] = total cache size in kbytes
 	//run file >a.out K L C traceFile
 int main(int argc, char *argv[]){
-	int hitRate;
+	int hitRate;int k, l, c;
+	k = (int) argv[1];l = (int) argv[2];c = (int) argv[3];
 	assert(argv[1]>0);
 	assert(argv[2]>0);
 	assert(argv[3]>0);
