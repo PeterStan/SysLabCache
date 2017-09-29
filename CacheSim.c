@@ -5,13 +5,18 @@
 //#include "CacheTest.c"
 
 int main(int argc, char *argv[]){
+	//argv[1] = set associativity
+	//argv[2] = line size in bytes
+	//argv[3] = total cache size in kbytes
+	//run file >a.out K L C traceFile
+
 	int hitRate;int k, l, c;
-	/*
+	
 	assert(argv[1]>0);
 	assert(argv[2]>0);
 	assert(argv[3]>0);
 	assert(argv[4]>0);
-	*/
+	
 	k = atoi(argv[1]); l = atoi(argv[2]); c = (*argv[3])-48;
 
 	/*
@@ -121,8 +126,5 @@ int updateOnMiss(){
 }
 
 
-	//argv[1] = set associativity
-	//argv[2] = line size in bytes
-	//argv[3] = total cache size in kbytes
-	//run file >a.out K L C traceFile
+	
 
