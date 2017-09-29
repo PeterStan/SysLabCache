@@ -33,12 +33,6 @@ int accessLRUArray(int setIndex, int wayIndex){
 	return 0;
 }
 
-int getSetIndex(int address){	
-	int mask = ~(0xFFFFFFFF << Cache.setIndexFieldLength);
-	address = ((unsigned int)address) >> Cache.blockOffsetFieldLength;
-	return address & mask;
-}
-
 int getWayIndex(int address){
 	int mask = ~(0xFFFFFFFF << Cache.blockOffsetFieldLength);
 	return address & mask;
@@ -64,7 +58,9 @@ int lg(int x){//returns log base 2 of x, or -1
 
 //Outputs the cache set in which the address falls
 int whichSet(int address){
-	return 0;
+	int mask = ~(0xFFFFFFFF << Cache.setIndexFieldLength);
+	address = ((unsigned int)address) >> Cache.blockOffsetFieldLength;
+	return address & mask;
 }
 
 int whichSetTest(){
@@ -153,8 +149,8 @@ int tagBitsTest(){
 // If there is a hit, this outputs the cache way in which the accessed line can be found; 
 //it returns -1 if there is a cache miss
 int hitWay(int address){
-	int setIndex = getSetIndex(address);
-	int wayIndex = getWayIndex(address);
+	int wayIndex = ~(0xFFFFFFFF << Cache.blockOffsetFieldLength) & address;
+	int setIndex = whichSet(address);
 	int tag = tagBits(address);
 	if(*(*(Cache.tagArray + setIndex) + wayIndex) == tag) return wayIndex;
 	return -1;
