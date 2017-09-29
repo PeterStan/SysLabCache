@@ -21,10 +21,10 @@ int readTrace(char *file){
 int accessTagArray(int setIndex, int wayIndex, int t){
 
 	if(t == -1){
-		t = *(*(Cache.tagArray+setIndex)+wayIndex);
+		t = (*((int *)Cache.tagArray+setIndex*Cache.wSetWay+wayIndex));
 	}
 	else{
-		*(*(Cache.tagArray+setIndex)+wayIndex) = t;
+		*((int *)Cache.tagArray+(setIndex*Cache.wSetWay)+wayIndex) = t;
 	}
 	return t;
 }
@@ -84,18 +84,18 @@ int buildCache(){
 	Cache.tagFieldLength = (32 - Cache.setIndexFieldLength - Cache.blockOffsetFieldLength);
 
 	Cache.tagArray = (unsigned int **) malloc(Cache.kSetAss*sizeof(unsigned int*));
-	*Cache.tagArray = (unsigned int*) malloc(Cache.wSetWay*sizeof(unsigned int));
-	Cache.lruArray = (int **) malloc(Cache.kSetAss*sizeof(int*));
-	*Cache.lruArray = (int*) malloc(Cache.wSetWay*sizeof(int));
+	for (int i=0; i < Cache.kSetAss; i++) *(Cache.tagArray + i) = (unsigned int*) malloc(Cache.wSetWay*sizeof(unsigned int));
+	Cache.lruArray = (int **) malloc(Cache.kSetAss*sizeof(unsigned int*));
+	for (int i=0; i < Cache.kSetAss; i++) *(Cache.lruArray + i) = (unsigned int*) malloc(Cache.wSetWay*sizeof(unsigned int));
 	
 
 	for(int i = 0; i<Cache.kSetAss; i++){
 		for(int j = 0; j<Cache.wSetWay; j++){
-			Cache.lruArray[i][j] = -1;
+			*((int *)Cache.lruArray+(i*Cache.wSetWay)+j) = -1;
 		}
 	}
 
-	//intialize lru array, all values in lruarray to -1
+	//intialize lru array, all values in lruArray to -1
 }
 
 //Outputs the number of bits in the set index  field of theaddress
@@ -180,15 +180,12 @@ int main(int argc, char *argv[]){
 
 	int hitRate;int k, l, c;
 	k = atoi(argv[1]); l = atoi(argv[2]); c = ((*argv[3])-48);
-
-	Cache.kSetAss = k;
-	Cache.lSetLength = l;
-	Cache.cSetSizeBytes = c;
-	Cache.wSetWay = c/(k*l);
+	Cache.kSetAss = k;Cache.lSetLength = l;Cache.cSetSizeBytes = c;Cache.wSetWay = c/(k*l);
 
 	printf("Start, %d arguements: K:%d, L:%d, C:%d File: %s \n", argc, k, l, c, argv[4]);	
 
 
+	buildCache();
 	hitRate = readTrace(argv[4]);
 
 	printf("Done\n");
