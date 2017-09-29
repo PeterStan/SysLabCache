@@ -84,7 +84,7 @@ int buildCache(){
 	Cache.tagFieldLength = (32 - Cache.setIndexFieldLength - Cache.blockOffsetFieldLength);
 
 	Cache.tagArray = (unsigned int **) malloc(Chache.kSetAss*sizeof(unsigned int*));
-	*Cache.tagArray = (unsigned int*) malloc(Cache.wSeyWay*sizeof(unsigned int));
+	*Cache.tagArray = (unsigned int*) malloc(Cache.wSetWay*sizeof(unsigned int));
 	Cache.lruArray = (int **) malloc(Cache.kSetAss*sizeof(int*));
 	*Cache.lruArray = (int*) malloc(Cache.wSetWay*sizeof(int));
 	
