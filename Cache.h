@@ -24,3 +24,8 @@ int updateOnMiss();
 int readTrace();
 int accessCache();
 int buildCache();
+
+int accessLRU();
+int accessTag();
+int getSetIndex();
+int getWayIndex();
