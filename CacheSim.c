@@ -74,7 +74,7 @@ int buildCache(int k, int l, int c){
 	*Cache.lruArray = (int*) malloc((c/(k*l))*sizeof(int));
 	
 	for(int i = 0; i<k){
-		for(int j = 0; j<(c/(l*k)){
+		for(int j = 0; j<(c/(l*k))){
 			Cache.tagArray[i][j] = -1;
 			j++;
 		}
@@ -125,6 +125,8 @@ int tagBitsTest(){
 // If there is a hit, this outputs the cache way in which the accessed line can be found; 
 //it returns -1 if there is a cache miss
 int hitWay(int address){
+	int setBits = ((unsigned int)address) >> Cache.blockOffsetFieldLength;
+	
 	return 0;
 }
 
