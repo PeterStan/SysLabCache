@@ -17,6 +17,23 @@ int readTrace(char *file){
 	fclose(fp);
 }
 
+int accessTag(int setIndex, int wayIndex){
+	return 0;
+}
+
+int accessLRU(int setIndex, int wayIndex){
+	return 0;
+}
+
+int getSetIndex(int address){
+	return 0;
+}
+
+int getWayIndex(int address){
+	return 0;
+}
+
+
 //Takes the base-two log of the address passed 
 int logBaseTwo(int quantity){
 	assert(quantity>0);
