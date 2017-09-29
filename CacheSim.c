@@ -90,6 +90,9 @@ int accessCache(int address){
 	//argv[2] = line size in bytes
 	//argv[3] = total cache size in kbytes
 int buildCache(int k, int l, int c){
+	Cache.kSetAss = k;
+	Cache.lSetLength = l;
+	Cache.cSetSizeBytes = c;
 	Cache.setIndexFieldLength = setIndexLength(k,l,c);
 	Cache.blockOffsetFieldLength = offsetLength(k,l,c);
 	Cache.tagFieldLength = (32 - Cache.setIndexFieldLength - Cache.blockOffsetFieldLength);
@@ -101,11 +104,13 @@ int buildCache(int k, int l, int c){
 	
 	for(int i = 0; i<k; i++){
 		for(int j = 0; j<(c/(l*k)); j++){
-			Cache.tagArray[i][j] = -1;
+			Cache.lruArray[i][j] = -1;
 			j++;
 		}
 		i++;
 	}
+
+	return 0;
 
 	//intialize lru array, all values in lruarray to -1
 }

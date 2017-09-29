@@ -4,6 +4,9 @@
 
 
 struct cache{
+int kSetAss;
+int lSetLength;
+int cSetSizeBytes;
 int tagFieldLength;
 int setIndexFieldLength;
 int blockOffsetFieldLength;
