@@ -28,6 +28,14 @@ int logBaseTwo(int quantity){
 	return x;
 }
 
+int lg(int x){
+	int i;
+	for(i = 1; (1<<i) <= x; i++){
+		if(x == (1<<i))return i;
+	}
+	return -1;
+}
+
 //Outputs the cache set in which the address falls
 int whichSet(int address){
 	return 0;
@@ -40,8 +48,11 @@ int whichSetTest(){
 
 //returns 0 or 1 based on wether it is a hit or miss
 int accessCache(int address){
+	int setNum, tag;
+	setNum = 0;
+	tag = tagBits();
 
-	//find way, 
+	//find way, run hitWay, 
 	//check tag
 	//run either update on hit or update on miss
 
@@ -55,10 +66,9 @@ int accessCache(int address){
 	//argv[2] = line size in bytes
 	//argv[3] = total cache size in kbytes
 int buildCache(int k, int l, int c){
-	struct cache Cache;
-	Cache.setNumFieldLength = setIndexLength(k,l,c);
+	Cache.setIndexFieldLength = setIndexLength(k,l,c);
 	Cache.blockOffsetFieldLength = offsetLength(k,l,c);
-	Cache.tagFieldLength = (32 - Cache.setNumFieldLength - Cache.blockOffsetFieldLength);
+	Cache.tagFieldLength = (32 - Cache.setIndexFieldLength - Cache.blockOffsetFieldLength);
 }
 
 //Outputs the number of bits in the set index  field of theaddress
@@ -88,11 +98,10 @@ int offsetLengthTest(){
 }
 
 //Outputs the tag bits associated with the address
-
-
-int tagBits(unsigned int address, int offset, int setIndex){	
-	assert((offset + setIndex) < 32); 
-	address = address >> (offset + setIndex);
+int tagBits(unsigned int address){	
+	int shift = Cache.blockOffsetFieldLength + Cache.setIndexFieldLength;
+	assert(shift < 32); 
+	address = address >> (shift);
 	return address;
 }
 
@@ -140,13 +149,6 @@ int main(int argc, char *argv[]){
 
 	int hitRate;int k, l, c;
 	k = atoi(argv[1]); l = atoi(argv[2]); c = (*argv[3])-48;
-
-	/*
-	struct cache Cache;
-	Cache.setNumFieldLength = setIndexLength(k,l,c);
-	Cache.blockOffsetFieldLength = offsetLength(k,l,c);
-	Cache.tagFieldLength = (32 - Cache.setNumFieldLength - Cache.blockOffsetFieldLength);
-	*/
 
 
 	printf("Start, %d arguements: K:%d, L:%d, C:%d File: %s \n", argc, k, l, c, argv[4]);
