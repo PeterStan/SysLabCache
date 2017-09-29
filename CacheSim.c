@@ -48,10 +48,9 @@ int whichSetTest(){
 
 //returns 0 or 1 based on wether it is a hit or miss
 int accessCache(int address){
-	int way, setIndex, tag, r;
+	int way, setIndex, r;
 
 	setIndex = 0;
-	tag = tagBits(address);
 	way = hitWay(address);
 
 	if(way >= 0){
@@ -71,12 +70,12 @@ int buildCache(int k, int l, int c){
 	Cache.blockOffsetFieldLength = offsetLength(k,l,c);
 	Cache.tagFieldLength = (32 - Cache.setIndexFieldLength - Cache.blockOffsetFieldLength);
 
-	tagArray = (unsigned int **) malloc(k*sizeof(unsigned int*));
-	*tagArray = (unsigned int*) malloc((c/(k*l))*sizeof(unsigned int));
-	lruArray = (int **) malloc(k*sizeof(int*));
-	*lruArray = (int*) malloc((c/(k*l))*sizeof(int));
+	Cache.tagArray = (unsigned int **) malloc(k*sizeof(unsigned int*));
+	*Cache.tagArray = (unsigned int*) malloc((c/(k*l))*sizeof(unsigned int));
+	Cache.lruArray = (int **) malloc(k*sizeof(int*));
+	*Cache.lruArray = (int*) malloc((c/(k*l))*sizeof(int));
 
-
+	//intialize lru array, all values in lruarray to -1
 }
 
 //Outputs the number of bits in the set index  field of theaddress
