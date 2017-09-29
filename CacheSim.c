@@ -95,16 +95,14 @@ int buildCache(){
 	Cache.tagFieldLength = (32 - Cache.setIndexFieldLength - Cache.blockOffsetFieldLength);
 
 	Cache.tagArray = (unsigned int **) malloc(Chache.kSetAss*sizeof(unsigned int*));
-	*Cache.tagArray = (unsigned int*) malloc((Cache.cSetSizeBytes/(Cache.kSetAss*Cache.lSetLength))*sizeof(unsigned int));
+	*Cache.tagArray = (unsigned int*) malloc(Cache.wSeyWay*sizeof(unsigned int));
 	Cache.lruArray = (int **) malloc(Cache.kSetAss*sizeof(int*));
-	*Cache.lruArray = (int*) malloc((Cahce.cSetSizeBytes/(Cache.kSetAss*Cache.lSetLength))*sizeof(int));
+	*Cache.lruArray = (int*) malloc(Cache.wSetWay*sizeof(int));
 	
-	for(int i = 0; i<k; i++){
-		for(int j = 0; j<(Cache.cSetSizeBytes/(Cache.lSetLength*Cache.kSetAss)); j++){
+	for(int i = 0; i<Cache.kSetAss; i++){
+		for(int j = 0; j<Cache.wSetWay; j++){
 			Cache.lruArray[i][j] = -1;
-			j++;
 		}
-		i++;
 	}
 
 	return 0;
@@ -198,6 +196,7 @@ int main(int argc, char *argv[]){
 	Cache.kSetAss = k;
 	Cache.lSetLength = l;
 	Cache.cSetSizeBytes = c;
+	Cache.wSetWay = c/(k*l);
 
 	printf("Start, %d arguements: K:%d, L:%d, C:%d File: %s \n", argc, k, l, c, argv[4]);	
 
