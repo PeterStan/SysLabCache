@@ -101,7 +101,7 @@ int buildCache(){
 
 //Outputs the number of bits in the set index  field of theaddress
 int setIndexLength(){
-	int setLength = lg((Cache.cSetSizeBytes*8000)/(Cache.lSetLength*Cache.kSetAss));
+	int setLength = lg((Cache.cSetSizeBytes*8000)/(Cache.wSetWay));
 	int offsetSize = lg(Cache.kSetAss);
 	assert((32 - setLength - offsetSize) > 0);
 	return setLength;
@@ -113,9 +113,9 @@ int setIndexLengthTest(){
 
 //Outputs  the  number  of  bits  in  the  line  o sbbet field  of  the address
 int offsetLength(){
-	//int setLength = logBaseTwo(Cache.cSetSizeBytes/(Cache.lSetLength*Cache.kSetAss));
+	int setLength = logBaseTwo((Cache.cSetSizeBytes*8000)/(Cache.wSetWay));
 	int offsetSize = lg(Cache.kSetAss);
-	//assert((32 - setLength - offsetSize) > 0);
+	assert((32 - setLength - offsetSize) > 0);
 	return offsetSize; 
 }
 
