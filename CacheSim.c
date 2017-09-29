@@ -4,6 +4,33 @@
 #include "Cache.h"
 //#include "CacheTest.c"
 
+int main(int argc, char *argv[]){
+	int hitRate;int k, l, c;
+	/*
+	assert(argv[1]>0);
+	assert(argv[2]>0);
+	assert(argv[3]>0);
+	assert(argv[4]>0);
+	*/
+	k = atoi(argv[1]); l = atoi(argv[2]); c = (*argv[3])-48;
+
+	/*
+	struct cache Cache;
+	Cache.setNumFieldLength = setIndexLength(k,l,c);
+	Cache.blockOffsetFieldLength = offsetLength(k,l,c);
+	Cache.tagFieldLength = (32 - Cache.setNumFieldLength - Cache.blockOffsetFieldLength);
+	*/
+
+
+	printf("Start, %d arguements: K:%d, L:%d, C:%d File: %s \n", argc, k, l, c, argv[4]);
+	
+
+	hitRate = readTrace(argv[4]);//gives segfault
+
+
+	printf("Done\n");
+	return 0;
+}
 
 
 //takes trace file and returns hit rate
@@ -60,7 +87,7 @@ int setIndexLength(int k, int l, int c){
 	return setLength;
 }
 
-//Outputs  the  number  of  bits  in  the  line  o set field  of  the address
+//Outputs  the  number  of  bits  in  the  line  o sbbet field  of  the address
 int offsetLength(int k, int l, int c){
 	int setLength = logBaseTwo(c/(l*k));
 	int offsetSize = logBaseTwo(k);
@@ -98,30 +125,4 @@ int updateOnMiss(){
 	//argv[2] = line size in bytes
 	//argv[3] = total cache size in kbytes
 	//run file >a.out K L C traceFile
-int main(int argc, char *argv[]){
-	int hitRate;int k, l, c;
-	/*
-	assert(argv[1]>0);
-	assert(argv[2]>0);
-	assert(argv[3]>0);
-	assert(argv[4]>0);
-	*/
-	k = atoi(argv[1]); l = atoi(argv[2]); c = (*argv[3])-48;
 
-	/*
-	struct cache Cache;
-	Cache.setNumFieldLength = setIndexLength(k,l,c);
-	Cache.blockOffsetFieldLength = offsetLength(k,l,c);
-	Cache.tagFieldLength = (32 - Cache.setNumFieldLength - Cache.blockOffsetFieldLength);
-	*/
-
-
-	printf("Start, %d arguements: K:%d, L:%d, C:%d File: %s \n", argc, k, l, c, argv[4]);
-	
-
-	hitRate = readTrace(argv[4]);//gives segfault
-
-
-	printf("Done\n");
-	return 0;
-}
