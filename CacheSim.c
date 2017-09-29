@@ -60,14 +60,18 @@ int lg(int x){//returns log base 2 of x, or -1
 }
 
 //Outputs the cache set in which the address falls
-int whichSet(int address){
+int whichSet(unsigned int address){
 	int mask = ~(0xFFFFFFFF << Cache.setIndexFieldLength); 
-  	address = ((unsigned int)address) >> Cache.blockOffsetFieldLength; 
+  	address = address >> Cache.blockOffsetFieldLength; 
   	return address & mask;
 }
 
 int whichSetTest(){
-	//assert(whichSet() == 0);
+	int address1 = 0b10110011010111010000000000000111;
+	printf("%d\n", Cache.setIndexFieldLength);
+	assert(Cache.setIndexFieldLength == 16);
+	assert(Cache.blockOffsetFieldLength == 3);
+	assert(whichSet(address1)==40960);
 	return 0;
 };
 
@@ -116,7 +120,7 @@ int buildCache(){
 
 //Outputs the number of bits in the set index  field of theaddress
 int setIndexLength(){
-	int setLength = lg((Cache.cSetSizeBytes*8000)/(Cache.wSetWay));
+	int setLength = lg(Cache.wSetWay);
 	int offsetSize = lg(Cache.kSetAss);
 	assert((32 - setLength - offsetSize) > 0);
 	return setLength;
@@ -255,7 +259,7 @@ int main(int argc, char *argv[]){
 	printf("kSetAss: %d, lSetLength: %d, cSetSizeBytes: %d, wSetWay: %d\n", Cache.kSetAss, Cache.lSetLength, Cache.cSetSizeBytes, Cache.wSetWay);
 
 	buildCache();
-
+	whichSetTest();
 
 
 	hitRate = readTrace(argv[4]);
