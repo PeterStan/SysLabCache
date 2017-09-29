@@ -133,8 +133,8 @@ int offsetLength(int k, int l, int c){
 }
 
 int offsetLengthTest(){
-	int length1 = offsetLength(512, 8, 16);
-	assert(length1 == 9);
+	int length1 = offsetLength(8, 16, 512);
+	assert(length1 == 4);
 	return 0;
 }
 
