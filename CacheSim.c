@@ -1,6 +1,3 @@
-#include <stdio.h>
-#include <assert.h>
-#include <stdlib.h>
 #include "Cache.h"
 //#include "CacheTest.c"
 
@@ -38,6 +35,14 @@ int whichSet(int address){
 
 //returns 0 or 1 based on wether it is a hit or miss
 int accessCache(int address){
+
+	//find way, 
+	//check tag
+	//run either update on hit or update on miss
+
+
+
+
 	return 0;
 }
 
@@ -77,7 +82,7 @@ int tagBits(unsigned int address, int offset, int setIndex){
 }
 
 // If there is a hit, this outputs the cache way in which the accessed line can be found; 
-//it returns -1if there is a cache miss
+//it returns -1 if there is a cache miss
 int hitWay(){
 	return 0;
 }
@@ -93,19 +98,17 @@ int updateOnMiss(){
 }
 
 
-	int main(int argc, char *argv[]){
 	//argv[1] = set associativity
 	//argv[2] = line size in bytes
 	//argv[3] = total cache size in kbytes
 	//run file >a.out K L C traceFile
-
-	int hitRate;int k, l, c;
-	
+int main(int argc, char *argv[]){
 	assert(argv[1]>0);
 	assert(argv[2]>0);
 	assert(argv[3]>0);
 	assert(argv[4]>0);
-	
+
+	int hitRate;int k, l, c;
 	k = atoi(argv[1]); l = atoi(argv[2]); c = (*argv[3])-48;
 
 	/*
@@ -119,7 +122,7 @@ int updateOnMiss(){
 	printf("Start, %d arguements: K:%d, L:%d, C:%d File: %s \n", argc, k, l, c, argv[4]);
 	
 
-	hitRate = readTrace(argv[4]);//gives segfault
+	hitRate = readTrace(argv[4]);
 
 
 	printf("Done\n");

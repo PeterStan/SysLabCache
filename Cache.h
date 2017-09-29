@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <assert.h>
-
+#include <stdlib.h>
 
 struct cache{
 int tagFieldLength;
