@@ -33,12 +33,6 @@ int accessLRUArray(int setIndex, int wayIndex){
 	return 0;
 }
 
-int getSetIndex(int address){	
-	int mask = ~(0xFFFFFFFF << Cache.setIndexFieldLength);
-	address = ((unsigned int)address) >> Cache.blockOffsetFieldLength;
-	return address & mask;
-}
-
 int getWayIndex(int address){
 	int mask = ~(0xFFFFFFFF << Cache.blockOffsetFieldLength);
 	return address & mask;
@@ -64,8 +58,12 @@ int lg(int x){//returns log base 2 of x, or -1
 
 //Outputs the cache set in which the address falls
 int whichSet(int address){
-	return 0;
+	int mask = ~(0xFFFFFFFF << Cache.setIndexFieldLength);
+	address = ((unsigned int)address) >> Cache.blockOffsetFieldLength;
+	return address & mask;
 }
+
+//chronic osteoarthritis
 
 int whichSetTest(){
 	//assert(whichSet() == 0);
@@ -90,6 +88,9 @@ int accessCache(int address){
 
 
 int buildCache(int k, int l, int c){
+	Cache.kSetAss = k;
+	Cache.lSetLength = l;
+	Cache.cSetSizeBytes = c;
 	Cache.setIndexFieldLength = setIndexLength(k,l,c);
 	Cache.blockOffsetFieldLength = offsetLength(k,l,c);
 	Cache.tagFieldLength = (32 - Cache.setIndexFieldLength - Cache.blockOffsetFieldLength);
@@ -101,11 +102,13 @@ int buildCache(int k, int l, int c){
 	
 	for(int i = 0; i<k; i++){
 		for(int j = 0; j<(c/(l*k)); j++){
-			Cache.tagArray[i][j] = -1;
+			Cache.lruArray[i][j] = -1;
 			j++;
 		}
 		i++;
 	}
+
+	return 0;
 
 	//intialize lru array, all values in lruarray to -1
 }
@@ -151,9 +154,12 @@ int tagBitsTest(){
 // If there is a hit, this outputs the cache way in which the accessed line can be found; 
 //it returns -1 if there is a cache miss
 int hitWay(int address){
-	int setBits = ((unsigned int)address) >> Cache.blockOffsetFieldLength;
-	
-	return 0;
+	int setIndex = whichSet(address);
+	int tag = tagBits(address);
+	for(int wayIndex = 0; wayIndex <= kSetAss; wayIndex++){
+		if(*(*(Cache.tagArray + setIndex) + wayIndex) == tag) return wayIndex;
+	}	
+	return -1;
 }
 
 int hitWayTest(){
