@@ -4,7 +4,7 @@
 
 struct cache{
 int tagFieldLength;
-int setNumFieldLength;
+int setIndexFieldLength;
 int blockOffsetFieldLength;
 unsigned int **tagArray; 
 int **lruArray;
