@@ -38,6 +38,11 @@ int whichSet(int address){
 	return 0;
 }
 
+int whichSetTest(){
+	//assert(whichSet() == 0);
+	return 0;
+};
+
 //returns 0 or 1 based on wether it is a hit or miss
 int accessCache(int address){
 	return 0;
@@ -61,12 +66,22 @@ int setIndexLength(int k, int l, int c){
 	return setLength;
 }
 
+int setIndexLengthTest(){
+	return 0;
+}
+
 //Outputs  the  number  of  bits  in  the  line  o sbbet field  of  the address
 int offsetLength(int k, int l, int c){
 	int setLength = logBaseTwo(c/(l*k));
 	int offsetSize = logBaseTwo(k);
 	assert((32 - setLength - offsetSize) > 0);
 	return offsetSize; 
+}
+
+int offsetLengthTest(){
+	int length1 = offsetLength(512, 8, 16);
+	assert(length1 == 9);
+	return 0;
 }
 
 //Outputs the tag bits associated with the address
@@ -78,9 +93,17 @@ int tagBits(unsigned int address, int offset, int setIndex){
 	return address;
 }
 
+int tagBitsTest(){
+	return 0;
+}
+
 // If there is a hit, this outputs the cache way in which the accessed line can be found; 
 //it returns -1if there is a cache miss
 int hitWay(){
+	return 0;
+}
+
+int hitWayTest(){
 	return 0;
 }
 
@@ -89,8 +112,16 @@ int updateOnHit(){
 	return 0;
 }
 
+int updateOnHitTest(){
+	return 0;
+}
+
 // Updates the tagArray and lruArray upon a miss.  This function is only called on a cache miss
 int updateOnMiss(){
+	return 0;
+}
+
+int updateOnMissTest(){
 	return 0;
 }
 
