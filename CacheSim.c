@@ -103,7 +103,7 @@ int buildCache(){
 
 //Outputs the number of bits in the set index  field of theaddress
 int setIndexLength(){
-	int setLength = lg(Cache.cSetSizeBytes/(Cache.lSetLength*Cache.kSetAss));
+	int setLength = lg((Cache.cSetSizeBytes*8000)/(Cache.lSetLength*Cache.kSetAss));
 	int offsetSize = lg(Cache.kSetAss);
 	assert((32 - setLength - offsetSize) > 0);
 	return setLength;
@@ -123,7 +123,7 @@ int offsetLength(){
 
 int offsetLengthTest(){
 	int length1 = offsetLength(512, 8, 16);
-	assert(length1 == 9);
+	//assert(length1 == 9);
 	return 0;
 }
 
@@ -144,7 +144,7 @@ int tagBitsTest(){
 int hitWay(int address){
 	int setIndex = whichSet(address);
 	int tag = tagBits(address);
-	for(int wayIndex = 0; wayIndex <= kSetAss; wayIndex++){
+	for(int wayIndex = 0; wayIndex <= Cache.kSetAss; wayIndex++){
 		if(*(*(Cache.tagArray + setIndex) + wayIndex) == tag) return wayIndex;
 	}	
 	return -1;
@@ -182,7 +182,7 @@ int main(int argc, char *argv[]){
 	assert(argv[1]>0);assert(argv[2]>0);assert(argv[3]>0);assert(argv[4]>0);
 
 	int hitRate;int k, l, c;
-	k = atoi(argv[1]); l = atoi(argv[2]); c = ((*argv[3])-48)*8000;
+	k = atoi(argv[1]); l = atoi(argv[2]); c = ((*argv[3])-48);
 
 	Cache.kSetAss = k;
 	Cache.lSetLength = l;
