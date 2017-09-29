@@ -33,12 +33,15 @@ int accessLRUArray(int setIndex, int wayIndex){
 	return 0;
 }
 
-int getSetIndex(int address){
-	return 0;
+int getSetIndex(int address){	
+	int mask = ~(0xFFFFFFFF << Cache.setIndexFieldLength);
+	address = ((unsigned int)address) >> Cache.blockOffsetFieldLength;
+	return address & mask;
 }
 
 int getWayIndex(int address){
-	return 0;
+	int mask = ~(0xFFFFFFFF << Cache.blockOffsetFieldLength);
+	return address & mask;
 }
 
 
