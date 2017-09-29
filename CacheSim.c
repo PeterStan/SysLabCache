@@ -18,6 +18,7 @@ int readTrace(char *file){
 }
 
 int accessTag(int setIndex, int wayIndex){
+	
 	return 0;
 }
 
