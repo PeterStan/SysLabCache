@@ -164,7 +164,7 @@ int hitWayTest(){
 
 //Updates the tagArray and lruArray upon a hit.  This function is only called on a cache hit
 int updateOnHit(int address){
-	//update LRU
+	//update LRU only
 
 	return 1;
 }
