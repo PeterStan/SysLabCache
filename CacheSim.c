@@ -86,22 +86,25 @@ int accessCache(int address){
 
 
 int buildCache(){
-	Cache.setIndexFieldLength = setIndexLength();
-	Cache.blockOffsetFieldLength = offsetLength();
+	//Cache.setIndexFieldLength = setIndexLength();
+	//Cache.blockOffsetFieldLength = offsetLength();
 	Cache.tagFieldLength = (32 - Cache.setIndexFieldLength - Cache.blockOffsetFieldLength);
+
+	printf("Set Cache Values\n");
 
 	Cache.tagArray = (unsigned int **) malloc(Cache.kSetAss*sizeof(unsigned int*));
 	for (int i=0; i < Cache.kSetAss; i++) *(Cache.tagArray + i) = (unsigned int*) malloc(Cache.wSetWay*sizeof(unsigned int));
 	Cache.lruArray = (int **) malloc(Cache.kSetAss*sizeof(unsigned int*));
 	for (int i=0; i < Cache.kSetAss; i++) *(Cache.lruArray + i) = (unsigned int*) malloc(Cache.wSetWay*sizeof(unsigned int));
 	
+	printf("Allocated Space for Cache\n");
 
 	for(int i = 0; i<Cache.kSetAss; i++){
 		for(int j = 0; j<Cache.wSetWay; j++){
 			*((int *)Cache.lruArray+(i*Cache.wSetWay)+j) = -1;
 		}
 	}
-
+	printf("Cache Built\n");
 	//intialize lru array, all values in lruArray to -1
 }
 
@@ -193,6 +196,27 @@ int findLRU(int address){
 int updateOnMissTest(){
 	return 0;
 }
+
+int printLRUArray(){
+	for(int i = 0; i<Cache.wSetWay; i++){
+		for(int j = 0; j<Cache.kSetAss; j++){
+			printf("%d\t", (*((int *)Cache.lruArray+i*Cache.kSetAss+j)));
+		}
+		printf("\n");
+	}
+	printf("lruArray Printed\n");
+	return 0;
+}
+
+int printTagArray(){
+	for(int i = 0; i<Cache.wSetWay; i++){
+		for(int j = 0; j<Cache.kSetAss; j++){
+			printf("%d\t", (*((int *)Cache.tagArray+i*Cache.kSetAss+j)));
+		}
+		printf("\n");
+	}
+	return 0;
+}
  
 	//argv[1] = set associativity
 	//argv[2] = line size in bytes
@@ -203,15 +227,16 @@ int main(int argc, char *argv[]){
 
 	int hitRate;int k, l, c;
 	k = atoi(argv[1]); l = atoi(argv[2]); c = atoi(argv[3]);
-	Cache.kSetAss = k;Cache.lSetLength = l;Cache.cSetSizeBytes = c;Cache.wSetWay = c/(k*l);
+	Cache.kSetAss = k;Cache.lSetLength = l;Cache.cSetSizeBytes = c;Cache.wSetWay = (c*8000)/(k*l);
 
 	printf("Start, %d arguements: K:%d, L:%d, C:%d File: %s \n", argc, k, l, c, argv[4]);	
-
+	printf("kSetAss: %d, lSetLength: %d, cSetSizeBytes: %d, wSetWay: %d\n", Cache.kSetAss, Cache.lSetLength, Cache.cSetSizeBytes, Cache.wSetWay);
 
 	buildCache();
+	//printLRUArray();
+
 	hitRate = readTrace(argv[4]);
 
-	printf("%d\n",accessLRUArray(1,1,-1));
 
 	printf("Done\n");
 	return 0;
