@@ -96,14 +96,11 @@ int buildCache(){
 	Cache.tagFieldLength = (32 - Cache.setIndexFieldLength - Cache.blockOffsetFieldLength);
 	Cache.MRU = 0;
 
-	printf("Set Cache Values\n");
-
 	Cache.tagArray = (unsigned int **) malloc(Cache.kSetAss*sizeof(unsigned int*));
 	for (int i=0; i < Cache.kSetAss; i++) *(Cache.tagArray + i) = (unsigned int*) malloc(Cache.wSetWay*sizeof(unsigned int));
 	Cache.lruArray = (int **) malloc(Cache.kSetAss*sizeof(unsigned int*));
 	for (int i=0; i < Cache.kSetAss; i++) *(Cache.lruArray + i) = (unsigned int*) malloc(Cache.wSetWay*sizeof(unsigned int));
 	
-	printf("Allocated Space for Cache\n");
 
 	for(int i = 0; i<Cache.kSetAss; i++){
 		for(int j = 0; j<Cache.wSetWay; j++){
@@ -111,7 +108,6 @@ int buildCache(){
 		}
 	}
 	printf("Cache Built\n");
-	//intialize lru array, all values in lruArray to -1
 }
 
 //Outputs the number of bits in the set index  field of theaddress
@@ -175,9 +171,6 @@ int updateOnHit(int address){
 	return 1;
 }
 
-int updateOnHitTest(){
-	return 1;
-}
 
 // Updates the tagArray and lruArray upon a miss.  This function is only called on a cache miss
 int updateOnMiss(int address){
@@ -201,7 +194,7 @@ int findLRU(int address){
 	set = whichSet(address);
 
 	for(int i = 0; i < Cache.wSetWay; i++){
-		printf("Set: %d, Way: %d\n", set, i);
+		printf("Set: %d, Way: %d, Lowest: %d\n", set, i, lowest);
 		if(*((int *)Cache.lruArray+(set*Cache.wSetWay)+i) < lowest){
 			lWay = i;
 			lowest = *((int *)Cache.lruArray+(whichSet(address)*Cache.wSetWay)+i);
