@@ -15,6 +15,8 @@ int readTrace(char *file){
 	}
 
 	fclose(fp);
+	printf("Trace Read\n");
+	return 0;
 }
 
 //sets tag in array to t, or if t is -1 return tag at that index
@@ -86,8 +88,8 @@ int accessCache(int address){
 
 
 int buildCache(){
-	//Cache.setIndexFieldLength = setIndexLength();
-	//Cache.blockOffsetFieldLength = offsetLength();
+	Cache.setIndexFieldLength = setIndexLength();
+	Cache.blockOffsetFieldLength = offsetLength();
 	Cache.tagFieldLength = (32 - Cache.setIndexFieldLength - Cache.blockOffsetFieldLength);
 
 	printf("Set Cache Values\n");
