@@ -4,6 +4,7 @@
 
 
 struct cache{
+int MRU;
 int kSetAss;
 int lSetLength;
 int cSetSizeBytes;
@@ -22,11 +23,12 @@ int setIndexLength();
 int offsetLength();
 int tagBits();
 int hitWay();
-int updateOnHit();
+int updateOnHit();//done, Not tested
 int updateOnMiss();
-int readTrace();
+float readTrace(char *file); //done, and tested
 int accessCache();
-int buildCache();
+int buildCache(); //done, kinda tested
+int findLRU(int address); //done, kinda tested
 
 int accessTagArray(int setIndex, int wayIndex, int t); //done, kinda tested
 int accessLRUArray(int setIndex, int wayIndex, int t); //done, kinda tested
@@ -34,9 +36,6 @@ int getSetIndex();
 int getWayIndex();
 
 /*
-int readTrace(char *file); //done and tested
-int accessTagArray(int setIndex, int wayIndex, int t); //done, kinda tested
-int accessLRUArray(int setIndex, int wayIndex, int t); //done, kinda tested
 int getWayIndex(int address);
 int lg(int x);  //done
 int whichSet(int address);
@@ -53,6 +52,6 @@ int hitWayTest();
 int updateOnHit(int address);
 int updateOnHitTest();
 int updateOnMiss(int address);
-int findLRU(int address);
+
 int updateOnMissTest();
 */

@@ -4,19 +4,22 @@
 
 
 //takes trace file and returns hit rate
-int readTrace(char *file){
+float readTrace(char *file){
+	int hits, accesses;
 	 
 	unsigned int address;
 	FILE *fp;
 	fp = fopen(file, "r+");
 
 	while( fscanf(fp, "%X", &address) != EOF){
-		accessCache(address);//printf("%X\n", address);
+		hits += accessCache(address);//printf("%X\n", address);
+		Cache.MRU++;
+		accesses++;
 	}
 
 	fclose(fp);
 	printf("Trace Read\n");
-	return 0;
+	return hits/accesses;
 }
 
 //sets tag in array to t, or if t is -1 return tag at that index
@@ -33,15 +36,13 @@ int accessTagArray(int setIndex, int wayIndex, int t){
 
 //increments Lru value at position if 1, or just returns value if -1
 int accessLRUArray(int setIndex, int wayIndex, int t){
-	int ret;
-	ret = (*((int *)Cache.lruArray+setIndex*Cache.wSetWay+wayIndex));
 
 	if(t == -1){
-		return ret;
+		return (*((int *)Cache.lruArray+setIndex*Cache.wSetWay+wayIndex));
 	}
 	else if(t == 1){
-		ret = ret + 1;
-		return ret;
+		(*((int *)Cache.lruArray+setIndex*Cache.wSetWay+wayIndex)) = Cache.MRU;
+		return (*((int *)Cache.lruArray+setIndex*Cache.wSetWay+wayIndex));
 	}
 	return 0;
 }
@@ -91,6 +92,7 @@ int buildCache(){
 	Cache.setIndexFieldLength = setIndexLength();
 	Cache.blockOffsetFieldLength = offsetLength();
 	Cache.tagFieldLength = (32 - Cache.setIndexFieldLength - Cache.blockOffsetFieldLength);
+	Cache.MRU = 0;
 
 	printf("Set Cache Values\n");
 
@@ -177,21 +179,31 @@ int updateOnHitTest(){
 
 // Updates the tagArray and lruArray upon a miss.  This function is only called on a cache miss
 int updateOnMiss(int address){
-	//set tag into tag array
-	accessLRUArray(whichSet(address), getWayIndex(address), 1);
+	int way,set;
+	way = findLRU(address);
+	set = whichSet(address);
+
+	accessLRUArray(set,way,1);
+	accessTagArray(set,way, tagBits(address));
 
 	return 0;
 }
 
 //returns way of the least recently used place in the cache
 int findLRU(int address){
+	int lowest,lWay;
+	lowest = 0;
 
-	for(int i = 0; i<Cache.kSetAss; i++){
-		for(int j = 0; j<Cache.wSetWay; j++){
-			*((int *)Cache.lruArray+(i*Cache.wSetWay)+j) = -1;
+	for(int i = 0; i < Cache.wSetWay; i++){
+		if(*((int *)Cache.lruArray+(whichSet(address)*Cache.wSetWay)+i) < lowest){
+			lWay = i;
+			lowest = *((int *)Cache.lruArray+(whichSet(address)*Cache.wSetWay)+i);
+			//printf("Lowest: %d\n", lWay);
 		}
 	}
-	//have set, find way and put address there, then return way
+
+	return lWay;
+	//have set, find least recently used in LRUArray, return way
 
 }
 
@@ -227,7 +239,7 @@ int printTagArray(){
 int main(int argc, char *argv[]){
 	assert(argv[1]>0);assert(argv[2]>0);assert(argv[3]>0);assert(argv[4]>0);
 
-	int hitRate;int k, l, c;
+	float hitRate;int k, l, c;
 	k = atoi(argv[1]); l = atoi(argv[2]); c = atoi(argv[3]);
 	Cache.kSetAss = k;Cache.lSetLength = l;Cache.cSetSizeBytes = c;Cache.wSetWay = (c*8000)/(k*l);
 
@@ -235,11 +247,13 @@ int main(int argc, char *argv[]){
 	printf("kSetAss: %d, lSetLength: %d, cSetSizeBytes: %d, wSetWay: %d\n", Cache.kSetAss, Cache.lSetLength, Cache.cSetSizeBytes, Cache.wSetWay);
 
 	buildCache();
-	//printLRUArray();
+
 
 	hitRate = readTrace(argv[4]);
 
 
+
+	printf("Hit Rate: %f\n", hitRate);
 	printf("Done\n");
 	return 0;
 }
