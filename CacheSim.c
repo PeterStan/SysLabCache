@@ -29,7 +29,18 @@ int accessTagArray(int setIndex, int wayIndex, int t){
 	return t;
 }
 
-int accessLRUArray(int setIndex, int wayIndex){
+//increments Lru value at position if 1, or just returns value if -1
+int accessLRUArray(int setIndex, int wayIndex, int t){
+	int ret;
+	ret = (*((int *)Cache.lruArray+setIndex*Cache.wSetWay+wayIndex));
+
+	if(t == -1){
+		return ret;
+	}
+	else if(t == 1){
+		ret = ret + 1;
+		return ret;
+	}
 	return 0;
 }
 
@@ -154,6 +165,7 @@ int hitWayTest(){
 //Updates the tagArray and lruArray upon a hit.  This function is only called on a cache hit
 int updateOnHit(int address){
 	//update LRU only
+	accessLRUArray(getSetIndex(address), getWayIndex(address), 1);
 
 	return 1;
 }
@@ -164,7 +176,16 @@ int updateOnHitTest(){
 
 // Updates the tagArray and lruArray upon a miss.  This function is only called on a cache miss
 int updateOnMiss(int address){
+	//set tag into tag array
+	accessLRUArray(getSetIndex(address), getWayIndex(address), 1);
+
 	return 0;
+}
+
+//returns way of the least recently used place in the cache
+int findLRU(int address){
+	//have set, find way and put address there, then return way
+
 }
 
 int updateOnMissTest(){
@@ -179,7 +200,7 @@ int main(int argc, char *argv[]){
 	assert(argv[1]>0);assert(argv[2]>0);assert(argv[3]>0);assert(argv[4]>0);
 
 	int hitRate;int k, l, c;
-	k = atoi(argv[1]); l = atoi(argv[2]); c = ((*argv[3])-48);
+	k = atoi(argv[1]); l = atoi(argv[2]); c = atoi(argv[3]);
 	Cache.kSetAss = k;Cache.lSetLength = l;Cache.cSetSizeBytes = c;Cache.wSetWay = c/(k*l);
 
 	printf("Start, %d arguements: K:%d, L:%d, C:%d File: %s \n", argc, k, l, c, argv[4]);	
@@ -187,6 +208,8 @@ int main(int argc, char *argv[]){
 
 	buildCache();
 	hitRate = readTrace(argv[4]);
+
+	printf("%d\n",accessLRUArray(1,1,-1));
 
 	printf("Done\n");
 	return 0;
