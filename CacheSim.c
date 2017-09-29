@@ -67,12 +67,10 @@ int accessCache(int address){
 	//argv[2] = line size in bytes
 	//argv[3] = total cache size in kbytes
 int buildCache(int k, int l, int c){
-	struct cache Cache;
 	Cache.setNumFieldLength = setIndexLength(k,l,c);
 	Cache.blockOffsetFieldLength = offsetLength(k,l,c);
 	Cache.tagFieldLength = (32 - Cache.setNumFieldLength - Cache.blockOffsetFieldLength);
-	unsigned int **tagArray;
-	int **lruArray;
+
 	tagArray = (unsigned int **) malloc(k*sizeof(unsigned int*));
 	*tagArray = (unsigned int*) malloc((c/(k*l))*sizeof(unsigned int));
 	lruArray = (int **) malloc(k*sizeof(int*));
