@@ -25,8 +25,6 @@ int logBaseTwo(int quantity){
 		x++;
 	}
 	return x;
-	free(x);
-	free(quantity);
 }
 
 int lg(int x){//returns log base 2 of x, or -1 
