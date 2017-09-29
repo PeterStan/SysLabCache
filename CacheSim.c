@@ -28,12 +28,11 @@ int logBaseTwo(int quantity){
 	return x;
 }
 
-int lg(int x){
+int lg(int x){//returns log base 2 of x, or -1 
 	int i;
-	for(i = 1; (1<<i) <= x; i++){
+	for(i = 1; (1<<i) <= x; i++)
 		if(x == (1<<i))return i;
-	}
-	return -1;
+	return i;
 }
 
 //Outputs the cache set in which the address falls
@@ -48,10 +47,19 @@ int whichSetTest(){
 
 //returns 0 or 1 based on wether it is a hit or miss
 int accessCache(int address){
-	int setNum, tag;
-	setNum = 0;
-	tag = tagBits();
+	int way, setIndex, tag, r;
+	setIndex = 0;
+	tag = tagBits(address);
+	way = hitWay(address);
 
+
+
+	if(way >= 0){
+		r = updateOnHit();
+	}
+	else{
+		r = updateOnMiss();
+	}
 	//find way, run hitWay, 
 	//check tag
 	//run either update on hit or update on miss
@@ -59,7 +67,7 @@ int accessCache(int address){
 
 
 
-	return 0;
+	return r;
 }
 
 	//argv[1] = set associativity
@@ -111,7 +119,7 @@ int tagBitsTest(){
 
 // If there is a hit, this outputs the cache way in which the accessed line can be found; 
 //it returns -1 if there is a cache miss
-int hitWay(){
+int hitWay(int address){
 	return 0;
 }
 
@@ -119,17 +127,19 @@ int hitWayTest(){
 	return 0;
 }
 
-//Updates the tagArray and lruArray upon a hit.  This function is only called on a cache hi
-int updateOnHit(){
-	return 0;
+//Updates the tagArray and lruArray upon a hit.  This function is only called on a cache hit
+int updateOnHit(int address){
+	//update LRU
+
+	return 1;
 }
 
 int updateOnHitTest(){
-	return 0;
+	return 1;
 }
 
 // Updates the tagArray and lruArray upon a miss.  This function is only called on a cache miss
-int updateOnMiss(){
+int updateOnMiss(int address){
 	return 0;
 }
 
@@ -152,17 +162,8 @@ int main(int argc, char *argv[]){
 	k = atoi(argv[1]); l = atoi(argv[2]); c = ((*argv[3])-48)*8000;
 
 
-	/*
-	struct cache Cache;
-	Cache.setNumFieldLength = setIndexLength(k,l,c);
-	Cache.blockOffsetFieldLength = offsetLength(k,l,c);
-	Cache.tagFieldLength = (32 - Cache.setNumFieldLength - Cache.blockOffsetFieldLength);
-	*/
-
-
-	printf("Start, %d arguements: K:%d, L:%d, C:%d File: %s \n", argc, k, l, c, argv[4]);
-	
-	offsetLengthTest();
+	printf("Start, %d arguements: K:%d, L:%d, C:%d File: %s \n", argc, k, l, c, argv[4]);	
+	printf("%d\n", lg(1025));
 
 	hitRate = readTrace(argv[4]);
 
