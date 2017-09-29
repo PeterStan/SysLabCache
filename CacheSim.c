@@ -49,11 +49,10 @@ int whichSetTest(){
 //returns 0 or 1 based on wether it is a hit or miss
 int accessCache(int address){
 	int way, setIndex, tag, r;
+
 	setIndex = 0;
 	tag = tagBits(address);
 	way = hitWay(address);
-
-
 
 	if(way >= 0){
 		r = updateOnHit();
@@ -61,13 +60,6 @@ int accessCache(int address){
 	else{
 		r = updateOnMiss();
 	}
-	//find way, run hitWay, 
-	//check tag
-	//run either update on hit or update on miss
-
-
-
-
 	return r;
 }
 

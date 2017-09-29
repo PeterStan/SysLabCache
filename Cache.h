@@ -10,6 +10,8 @@ unsigned int **tagArray;
 int **lruArray;
 };
 
+struct cache Cache;
+
 char* getNextAddress();
 int whichSet();
 int setIndexLength();
