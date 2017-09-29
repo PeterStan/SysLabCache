@@ -76,7 +76,7 @@ int whichSetTest(){
 int accessCache(int address){
 	int way, setIndex, r;
 
-	setIndex = 0;
+	setIndex = getSetIndex(address);
 	way = hitWay(address);
 
 	if(way >= 0){
@@ -88,9 +88,7 @@ int accessCache(int address){
 	return r;
 }
 
-	//argv[1] = set associativity
-	//argv[2] = line size in bytes
-	//argv[3] = total cache size in kbytes
+
 int buildCache(int k, int l, int c){
 	Cache.setIndexFieldLength = setIndexLength(k,l,c);
 	Cache.blockOffsetFieldLength = offsetLength(k,l,c);
@@ -135,7 +133,7 @@ int offsetLength(int k, int l, int c){
 int offsetLengthTest(){
 	int length1 = offsetLength(512, 8, 16);
 	assert(length1 == 9);
-	return 0;
+	return 0;git c
 }
 
 //Outputs the tag bits associated with the address
