@@ -163,7 +163,6 @@ int main(int argc, char *argv[]){
 
 
 	printf("Start, %d arguements: K:%d, L:%d, C:%d File: %s \n", argc, k, l, c, argv[4]);	
-	printf("%d\n", lg(1025));
 
 	hitRate = readTrace(argv[4]);
 
