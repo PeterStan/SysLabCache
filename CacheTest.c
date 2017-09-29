@@ -12,9 +12,8 @@ int setIndexLengthTest(){
 };
 
 int offsetLengthTest(){
-	//int length1 = offsetLength(512, 8, 16);
-	//assert(length1 == 9);
-	printf("this test works\n");
+	int length1 = offsetLength(512, 8, 16);
+	assert(length1 == 9);
 	return 0;
 };
 
