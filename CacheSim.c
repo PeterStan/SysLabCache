@@ -89,21 +89,18 @@ int accessCache(int address){
 	//argv[1] = set associativity
 	//argv[2] = line size in bytes
 	//argv[3] = total cache size in kbytes
-int buildCache(int k, int l, int c){
-	Cache.kSetAss = k;
-	Cache.lSetLength = l;
-	Cache.cSetSizeBytes = c;
-	Cache.setIndexFieldLength = setIndexLength(k,l,c);
-	Cache.blockOffsetFieldLength = offsetLength(k,l,c);
+int buildCache(){
+	Cache.setIndexFieldLength = setIndexLength();
+	Cache.blockOffsetFieldLength = offsetLength();
 	Cache.tagFieldLength = (32 - Cache.setIndexFieldLength - Cache.blockOffsetFieldLength);
 
-	Cache.tagArray = (unsigned int **) malloc(k*sizeof(unsigned int*));
-	*Cache.tagArray = (unsigned int*) malloc((c/(k*l))*sizeof(unsigned int));
-	Cache.lruArray = (int **) malloc(k*sizeof(int*));
-	*Cache.lruArray = (int*) malloc((c/(k*l))*sizeof(int));
+	Cache.tagArray = (unsigned int **) malloc(Chache.kSetAss*sizeof(unsigned int*));
+	*Cache.tagArray = (unsigned int*) malloc((Cache.cSetSizeBytes/(Cache.kSetAss*Cache.lSetLength))*sizeof(unsigned int));
+	Cache.lruArray = (int **) malloc(Cache.kSetAss*sizeof(int*));
+	*Cache.lruArray = (int*) malloc((Cahce.cSetSizeBytes/(Cache.kSetAss*Cache.lSetLength))*sizeof(int));
 	
 	for(int i = 0; i<k; i++){
-		for(int j = 0; j<(c/(l*k)); j++){
+		for(int j = 0; j<(Cache.cSetSizeBytes/(Cache.lSetLength*Cache.kSetAss)); j++){
 			Cache.lruArray[i][j] = -1;
 			j++;
 		}
@@ -116,9 +113,9 @@ int buildCache(int k, int l, int c){
 }
 
 //Outputs the number of bits in the set index  field of theaddress
-int setIndexLength(int k, int l, int c){
-	int setLength = lg(c/(l*k));
-	int offsetSize = lg(k);
+int setIndexLength(){
+	int setLength = lg(Cache.cSetSizeBytes/(Cache.lSetLength*Cache.kSetAss));
+	int offsetSize = lg(Cache.kSetAss);
 	assert((32 - setLength - offsetSize) > 0);
 	return setLength;
 }
@@ -128,9 +125,9 @@ int setIndexLengthTest(){
 }
 
 //Outputs  the  number  of  bits  in  the  line  o sbbet field  of  the address
-int offsetLength(int k, int l, int c){
-	//int setLength = logBaseTwo(c/(l*k));
-	int offsetSize = lg(k);
+int offsetLength(){
+	//int setLength = logBaseTwo(Cache.cSetSizeBytes/(Cache.lSetLength*Cache.kSetAss));
+	int offsetSize = lg(Cache.kSetAss);
 	//assert((32 - setLength - offsetSize) > 0);
 	return offsetSize; 
 }
@@ -197,6 +194,10 @@ int main(int argc, char *argv[]){
 
 	int hitRate;int k, l, c;
 	k = atoi(argv[1]); l = atoi(argv[2]); c = ((*argv[3])-48)*8000;
+
+	Cache.kSetAss = k;
+	Cache.lSetLength = l;
+	Cache.cSetSizeBytes = c;
 
 	printf("Start, %d arguements: K:%d, L:%d, C:%d File: %s \n", argc, k, l, c, argv[4]);	
 
