@@ -28,7 +28,7 @@ int accessLRUArray(int setIndex, int wayIndex){
 }
 
 int getSetIndex(int address){	
-	int mask = 0xFFFFFFFF << Cache.setIndexFieldLength;
+	int mask = ~(0xFFFFFFFF << Cache.setIndexFieldLength);
 	address = ((unsigned int)address) >> Cache.blockOffsetFieldLength;
 	return address & mask;
 }
