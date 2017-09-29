@@ -32,7 +32,6 @@ int main(int argc, char *argv[]){
 	return 0;
 }
 
-
 //takes trace file and returns hit rate
 int readTrace(char *file){
 	 
@@ -51,12 +50,12 @@ int readTrace(char *file){
 int logBaseTwo(int quantity){
 	assert(quantity>0);
 	int x = 0;
-	int quotient = quantity/(2^x);
-	while(quotient>1){
+	while((quantity-(2^x))>0){
 		x++;
-		quotient = quantity/(2^x);
 	}
 	return x;
+	free(x);
+	free(quantity);
 }
 
 //Outputs the cache set in which the address falls
@@ -77,6 +76,13 @@ int buildCache(int k, int l, int c){
 	Cache.setNumFieldLength = setIndexLength(k,l,c);
 	Cache.blockOffsetFieldLength = offsetLength(k,l,c);
 	Cache.tagFieldLength = (32 - Cache.setNumFieldLength - Cache.blockOffsetFieldLength);
+	unsigned int **tagArray;
+	int **lruArray;
+	*tagArray = (*unsigned int) malloc(k*sizeof(*unsigned int));
+	tagArray = (unsigned int) malloc((c/(k*l)*sizeof(unsigned int));
+	*lruArray = (*int) malloc(k*sizeof(*int));
+	lruArray = (int) malloc((c/(k*l)*sizeof(int));
+
 }
 
 //Outputs the number of bits in the set index  field of theaddress
