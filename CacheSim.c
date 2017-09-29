@@ -17,12 +17,13 @@ int readTrace(char *file){
 	fclose(fp);
 }
 
-int accessTag(int setIndex, int wayIndex){
+//sets tag in array to 'tag', or if tag is 0 return tag at that index
+int accessTagArray(int setIndex, int wayIndex, int tag){
 	
 	return 0;
 }
 
-int accessLRU(int setIndex, int wayIndex){
+int accessLRUArray(int setIndex, int wayIndex){
 	return 0;
 }
 
@@ -91,8 +92,8 @@ int buildCache(int k, int l, int c){
 	Cache.lruArray = (int **) malloc(k*sizeof(int*));
 	*Cache.lruArray = (int*) malloc((c/(k*l))*sizeof(int));
 	
-	for(int i = 0; i<k){
-		for(int j = 0; j<(c/(l*k))){
+	for(int i = 0; i<k; i++){
+		for(int j = 0; j<(c/(l*k)); j++){
 			Cache.tagArray[i][j] = -1;
 			j++;
 		}
