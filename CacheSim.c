@@ -44,17 +44,6 @@ int getWayIndex(int address){
 	return address & mask;
 }
 
-
-//Takes the base-two log of the address passed 
-int logBaseTwo(int quantity){
-	assert(quantity>0);
-	int x = 0;
-	while((quantity-(2^x))>0){
-		x++;
-	}
-	return x;
-}
-
 int lg(int x){//returns log base 2 of x, or -1 
 	int i;
 	for(i = 1; (1<<i) <= x; i++)
@@ -88,32 +77,46 @@ int accessCache(int address){
 	return r;
 }
 
+<<<<<<< HEAD
 
 int buildCache(int k, int l, int c){
 	Cache.setIndexFieldLength = setIndexLength(k,l,c);
 	Cache.blockOffsetFieldLength = offsetLength(k,l,c);
+=======
+	//argv[1] = set associativity
+	//argv[2] = line size in bytes
+	//argv[3] = total cache size in kbytes
+int buildCache(){
+	Cache.setIndexFieldLength = setIndexLength();
+	Cache.blockOffsetFieldLength = offsetLength();
+>>>>>>> c832ca113e43363f976eecde098e91393f867f7d
 	Cache.tagFieldLength = (32 - Cache.setIndexFieldLength - Cache.blockOffsetFieldLength);
 
-	Cache.tagArray = (unsigned int **) malloc(k*sizeof(unsigned int*));
-	*Cache.tagArray = (unsigned int*) malloc((c/(k*l))*sizeof(unsigned int));
-	Cache.lruArray = (int **) malloc(k*sizeof(int*));
-	*Cache.lruArray = (int*) malloc((c/(k*l))*sizeof(int));
+	Cache.tagArray = (unsigned int **) malloc(Chache.kSetAss*sizeof(unsigned int*));
+	*Cache.tagArray = (unsigned int*) malloc(Cache.wSetWay*sizeof(unsigned int));
+	Cache.lruArray = (int **) malloc(Cache.kSetAss*sizeof(int*));
+	*Cache.lruArray = (int*) malloc(Cache.wSetWay*sizeof(int));
 	
+<<<<<<< HEAD
 	for(int i = 0; i<k; i++){
 		for(int j = 0; j<(c/(l*k)); j++){
 			Cache.tagArray[i][j] = -1;
 			j++;
+=======
+	for(int i = 0; i<Cache.kSetAss; i++){
+		for(int j = 0; j<Cache.wSetWay; j++){
+			Cache.lruArray[i][j] = -1;
+>>>>>>> c832ca113e43363f976eecde098e91393f867f7d
 		}
-		i++;
 	}
 
 	//intialize lru array, all values in lruarray to -1
 }
 
 //Outputs the number of bits in the set index  field of theaddress
-int setIndexLength(int k, int l, int c){
-	int setLength = lg(c/(l*k));
-	int offsetSize = lg(k);
+int setIndexLength(){
+	int setLength = lg((Cache.cSetSizeBytes*8000)/(Cache.wSetWay));
+	int offsetSize = lg(Cache.kSetAss);
 	assert((32 - setLength - offsetSize) > 0);
 	return setLength;
 }
@@ -123,16 +126,16 @@ int setIndexLengthTest(){
 }
 
 //Outputs  the  number  of  bits  in  the  line  o sbbet field  of  the address
-int offsetLength(int k, int l, int c){
-	//int setLength = logBaseTwo(c/(l*k));
-	int offsetSize = lg(k);
-	//assert((32 - setLength - offsetSize) > 0);
+int offsetLength(){
+	int setLength = logBaseTwo((Cache.cSetSizeBytes*8000)/(Cache.wSetWay));
+	int offsetSize = lg(Cache.kSetAss);
+	assert((32 - setLength - offsetSize) > 0);
 	return offsetSize; 
 }
 
 int offsetLengthTest(){
 	int length1 = offsetLength(512, 8, 16);
-	assert(length1 == 9);
+	//assert(length1 == 9);
 	return 0;
 }
 
@@ -151,9 +154,18 @@ int tagBitsTest(){
 // If there is a hit, this outputs the cache way in which the accessed line can be found; 
 //it returns -1 if there is a cache miss
 int hitWay(int address){
+<<<<<<< HEAD
 	int setBits = ((unsigned int)address) >> Cache.blockOffsetFieldLength;
 	
 	return 0;
+=======
+	int setIndex = whichSet(address);
+	int tag = tagBits(address);
+	for(int wayIndex = 0; wayIndex <= Cache.kSetAss; wayIndex++){
+		if(*(*(Cache.tagArray + setIndex) + wayIndex) == tag) return wayIndex;
+	}	
+	return -1;
+>>>>>>> c832ca113e43363f976eecde098e91393f867f7d
 }
 
 int hitWayTest(){
@@ -188,7 +200,12 @@ int main(int argc, char *argv[]){
 	assert(argv[1]>0);assert(argv[2]>0);assert(argv[3]>0);assert(argv[4]>0);
 
 	int hitRate;int k, l, c;
-	k = atoi(argv[1]); l = atoi(argv[2]); c = ((*argv[3])-48)*8000;
+	k = atoi(argv[1]); l = atoi(argv[2]); c = ((*argv[3])-48);
+
+	Cache.kSetAss = k;
+	Cache.lSetLength = l;
+	Cache.cSetSizeBytes = c;
+	Cache.wSetWay = c/(k*l);
 
 	printf("Start, %d arguements: K:%d, L:%d, C:%d File: %s \n", argc, k, l, c, argv[4]);	
 
