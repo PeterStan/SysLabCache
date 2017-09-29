@@ -44,12 +44,6 @@ int accessLRUArray(int setIndex, int wayIndex, int t){
 	return 0;
 }
 
-int getSetIndex(int address){	
-	int mask = ~(0xFFFFFFFF << Cache.setIndexFieldLength);
-	address = ((unsigned int)address) >> Cache.blockOffsetFieldLength;
-	return address & mask;
-}
-
 int getWayIndex(int address){
 	int mask = ~(0xFFFFFFFF << Cache.blockOffsetFieldLength);
 	return address & mask;
@@ -64,7 +58,9 @@ int lg(int x){//returns log base 2 of x, or -1
 
 //Outputs the cache set in which the address falls
 int whichSet(int address){
-	return 0;
+	int mask = ~(0xFFFFFFFF << Cache.setIndexFieldLength); 
+  	address = ((unsigned int)address) >> Cache.blockOffsetFieldLength; 
+  	return address & mask;
 }
 
 int whichSetTest(){
@@ -153,7 +149,7 @@ int hitWay(int address){
 	int setIndex = whichSet(address);
 	int tag = tagBits(address);
 	for(int wayIndex = 0; wayIndex <= Cache.kSetAss; wayIndex++){
-		if(*(*(Cache.tagArray + setIndex) + wayIndex) == tag) return wayIndex;
+		if(accessTagArray(setIndex, wayIndex, -1) == tag) return wayIndex;
 	}	
 	return -1;
 }
