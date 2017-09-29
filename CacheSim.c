@@ -137,6 +137,8 @@ int updateOnHitTest(){
 
 // Updates the tagArray and lruArray upon a miss.  This function is only called on a cache miss
 int updateOnMiss(int address){
+	//Set tag in Cache
+	//update LRU Array
 	return 0;
 }
 
