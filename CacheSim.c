@@ -61,7 +61,7 @@ int whichSetTest(){
 int accessCache(int address){
 	int way, setIndex, r;
 
-	setIndex = getSetIndex(address);
+	setIndex = whichSet(address);
 	way = hitWay(address);
 
 	if(way >= 0){
