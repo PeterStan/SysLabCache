@@ -17,16 +17,16 @@ int readTrace(char *file){
 	fclose(fp);
 }
 
-//sets tag in array to 'tag', or if tag is -1 return tag at that index
-int accessTagArray(int setIndex, int wayIndex, int tag){
+//sets tag in array to t, or if t is -1 return tag at that index
+int accessTagArray(int setIndex, int wayIndex, int t){
 
-	if(tag == -1){
-		tag = *(*(Cache.tagArray+setIndex)+wayIndex);
+	if(t == -1){
+		t = *(*(Cache.tagArray+setIndex)+wayIndex);
 	}
 	else{
-		*(*(Cache.tagArray+setIndex)+wayIndex) = tag;
+		*(*(Cache.tagArray+setIndex)+wayIndex) = t;
 	}
-	return tag;
+	return t;
 }
 
 int accessLRUArray(int setIndex, int wayIndex){
@@ -187,21 +187,15 @@ int updateOnMissTest(){
 	//argv[3] = total cache size in kbytes
 	//run file >a.out K L C traceFile
 int main(int argc, char *argv[]){
-	assert(argv[1]>0);
-	assert(argv[2]>0);
-	assert(argv[3]>0);
-	assert(argv[4]>0);
-
+	assert(argv[1]>0);assert(argv[2]>0);assert(argv[3]>0);assert(argv[4]>0);
 
 	int hitRate;int k, l, c;
 	k = atoi(argv[1]); l = atoi(argv[2]); c = ((*argv[3])-48)*8000;
 
-
 	printf("Start, %d arguements: K:%d, L:%d, C:%d File: %s \n", argc, k, l, c, argv[4]);	
 
+
 	hitRate = readTrace(argv[4]);
-
-
 
 	printf("Done\n");
 	return 0;
