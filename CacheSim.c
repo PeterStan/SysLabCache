@@ -47,7 +47,7 @@ int accessLRUArray(int setIndex, int wayIndex, int t){
 	return 0;
 }
 
-int getWayIndex(int address){
+int getWayIndex(unsigned int address){
 	int mask = ~(0xFFFFFFFF << Cache.blockOffsetFieldLength);
 	return address & mask;
 }
@@ -66,17 +66,17 @@ int whichSet(unsigned int address){
   	return address & mask;
 }
 
-int whichSetTest(){
+/*int whichSetTest(){
 	int address1 = 0b10110011010111010000000000000111;
 	printf("%d\n", Cache.setIndexFieldLength);
 	assert(Cache.setIndexFieldLength == 16);
 	assert(Cache.blockOffsetFieldLength == 3);
 	assert(whichSet(address1)==40960);
 	return 0;
-};
+}*/
 
 //returns 0 or 1 based on wether it is a hit or miss
-int accessCache(int address){
+int accessCache(unsigned int address){
 	int way, setIndex, r;
 
 	setIndex = whichSet(address);
@@ -128,7 +128,7 @@ int setIndexLengthTest(){
 
 //Outputs  the  number  of  bits  in  the  line  o sbbet field  of  the address
 int offsetLength(){
-	int setLength = lg((Cache.cSetSizeBytes*8000)/(Cache.wSetWay));
+	int setLength = lg(Cache.wSetWay);
 	int offsetSize = lg(Cache.kSetAss);
 	assert((32 - setLength - offsetSize) > 0);
 	return offsetSize; 
@@ -154,7 +154,7 @@ int tagBitsTest(){
 
 // If there is a hit, this outputs the cache way in which the accessed line can be found; 
 //it returns -1 if there is a cache miss
-int hitWay(int address){
+int hitWay(unsigned int address){
 	int setIndex = whichSet(address);
 	int tag = tagBits(address);
 	for(int wayIndex = 0; wayIndex <= Cache.kSetAss; wayIndex++){
@@ -177,7 +177,7 @@ int updateOnHit(int address){
 
 
 // Updates the tagArray and lruArray upon a miss.  This function is only called on a cache miss
-int updateOnMiss(int address){
+int updateOnMiss(unsigned int address){
 	int way,set;
 	way = findLRU(address);
 	set = whichSet(address);
@@ -247,6 +247,10 @@ int main(int argc, char *argv[]){
 	printf("kSetAss: %d, lSetLength: %d, cSetSizeBytes: %d, wSetWay: %d\n", Cache.kSetAss, Cache.lSetLength, Cache.cSetSizeBytes, Cache.wSetWay);
 
 	buildCache();
+<<<<<<< HEAD
+=======
+	
+>>>>>>> 8a764f7c798c47b7d705f9c419d7596f665934f5
 
 
 	hitRate = readTrace(argv[4]);
