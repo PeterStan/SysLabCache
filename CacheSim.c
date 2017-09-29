@@ -79,9 +79,11 @@ int accessCache(int address){
 	way = hitWay(address);
 
 	if(way >= 0){
+		printf("Hit\n");
 		r = updateOnHit();
 	}
 	else{
+		printf("Miss\n");
 		r = updateOnMiss();
 	}
 	return r;
@@ -183,25 +185,31 @@ int updateOnMiss(int address){
 	way = findLRU(address);
 	set = whichSet(address);
 
+	printf("Found Location\n");
+
 	accessLRUArray(set,way,1);
 	accessTagArray(set,way, tagBits(address));
 
+	printf("Updated Miss at: %d\n", address);
 	return 0;
 }
 
 //returns way of the least recently used place in the cache
 int findLRU(int address){
-	int lowest,lWay;
+	int lowest,lWay, set;
 	lowest = 0;
+	set = whichSet(address);
 
 	for(int i = 0; i < Cache.wSetWay; i++){
-		if(*((int *)Cache.lruArray+(whichSet(address)*Cache.wSetWay)+i) < lowest){
+		printf("Set: %d, Way: %d\n", set, i);
+		if(*((int *)Cache.lruArray+(set*Cache.wSetWay)+i) < lowest){
 			lWay = i;
 			lowest = *((int *)Cache.lruArray+(whichSet(address)*Cache.wSetWay)+i);
 			//printf("Lowest: %d\n", lWay);
 		}
 	}
 
+	printf("Found LRU\n");
 	return lWay;
 	//have set, find least recently used in LRUArray, return way
 
@@ -247,6 +255,7 @@ int main(int argc, char *argv[]){
 	printf("kSetAss: %d, lSetLength: %d, cSetSizeBytes: %d, wSetWay: %d\n", Cache.kSetAss, Cache.lSetLength, Cache.cSetSizeBytes, Cache.wSetWay);
 
 	buildCache();
+
 
 
 	hitRate = readTrace(argv[4]);
