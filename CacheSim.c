@@ -72,6 +72,14 @@ int buildCache(int k, int l, int c){
 	*Cache.tagArray = (unsigned int*) malloc((c/(k*l))*sizeof(unsigned int));
 	Cache.lruArray = (int **) malloc(k*sizeof(int*));
 	*Cache.lruArray = (int*) malloc((c/(k*l))*sizeof(int));
+	
+	for(int i = 0; i<k){
+		for(int j = 0; j<(c/(l*k)){
+			Cache.tagArray[i][j] = -1;
+			j++;
+		}
+		i++;
+	}
 
 	//intialize lru array, all values in lruarray to -1
 }
@@ -137,8 +145,6 @@ int updateOnHitTest(){
 
 // Updates the tagArray and lruArray upon a miss.  This function is only called on a cache miss
 int updateOnMiss(int address){
-	//Set tag in Cache
-	//update LRU Array
 	return 0;
 }
 
