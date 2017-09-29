@@ -85,9 +85,9 @@ int setIndexLengthTest(){
 
 //Outputs  the  number  of  bits  in  the  line  o sbbet field  of  the address
 int offsetLength(int k, int l, int c){
-	int setLength = logBaseTwo(c/(l*k));
+	//int setLength = logBaseTwo(c/(l*k));
 	int offsetSize = logBaseTwo(k);
-	assert((32 - setLength - offsetSize) > 0);
+	//assert((32 - setLength - offsetSize) > 0);
 	return offsetSize; 
 }
 
@@ -147,14 +147,30 @@ int main(int argc, char *argv[]){
 	assert(argv[3]>0);
 	assert(argv[4]>0);
 
+
 	int hitRate;int k, l, c;
 	k = atoi(argv[1]); l = atoi(argv[2]); c = (*argv[3])-48;
 
 
+	
+	k = atoi(argv[1]); l = atoi(argv[2]); c = ((*argv[3])-48)*1000*8;
+
+
+	/*
+	struct cache Cache;
+	Cache.setNumFieldLength = setIndexLength(k,l,c);
+	Cache.blockOffsetFieldLength = offsetLength(k,l,c);
+	Cache.tagFieldLength = (32 - Cache.setNumFieldLength - Cache.blockOffsetFieldLength);
+	*/
+
+
+
 	printf("Start, %d arguements: K:%d, L:%d, C:%d File: %s \n", argc, k, l, c, argv[4]);
 	
+	offsetLengthTest();
 
 	hitRate = readTrace(argv[4]);
+
 
 
 	printf("Done\n");
