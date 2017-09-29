@@ -38,17 +38,6 @@ int getWayIndex(int address){
 	return address & mask;
 }
 
-
-//Takes the base-two log of the address passed 
-int logBaseTwo(int quantity){
-	assert(quantity>0);
-	int x = 0;
-	while((quantity-(2^x))>0){
-		x++;
-	}
-	return x;
-}
-
 int lg(int x){//returns log base 2 of x, or -1 
 	int i;
 	for(i = 1; (1<<i) <= x; i++)
