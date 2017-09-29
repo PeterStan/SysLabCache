@@ -151,10 +151,11 @@ int tagBitsTest(){
 // If there is a hit, this outputs the cache way in which the accessed line can be found; 
 //it returns -1 if there is a cache miss
 int hitWay(int address){
-	int wayIndex = ~(0xFFFFFFFF << Cache.blockOffsetFieldLength) & address;
 	int setIndex = whichSet(address);
 	int tag = tagBits(address);
-	if(*(*(Cache.tagArray + setIndex) + wayIndex) == tag) return wayIndex;
+	for(int wayIndex = 0; wayIndex <= kSetAss; wayIndex++){
+		if(*(*(Cache.tagArray + setIndex) + wayIndex) == tag) return wayIndex;
+	}	
 	return -1;
 }
 
