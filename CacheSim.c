@@ -72,7 +72,7 @@ int whichSetTest(){
 int accessCache(int address){
 	int way, setIndex, r;
 
-	setIndex = getSetIndex(address);
+	setIndex = whichSet(address);
 	way = hitWay(address);
 
 	if(way >= 0){
@@ -161,7 +161,7 @@ int hitWayTest(){
 //Updates the tagArray and lruArray upon a hit.  This function is only called on a cache hit
 int updateOnHit(int address){
 	//update LRU only
-	accessLRUArray(getSetIndex(address), getWayIndex(address), 1);
+	accessLRUArray(whichSet(address), getWayIndex(address), 1);
 
 	return 1;
 }
@@ -173,13 +173,19 @@ int updateOnHitTest(){
 // Updates the tagArray and lruArray upon a miss.  This function is only called on a cache miss
 int updateOnMiss(int address){
 	//set tag into tag array
-	accessLRUArray(getSetIndex(address), getWayIndex(address), 1);
+	accessLRUArray(whichSet(address), getWayIndex(address), 1);
 
 	return 0;
 }
 
 //returns way of the least recently used place in the cache
 int findLRU(int address){
+
+	for(int i = 0; i<Cache.kSetAss; i++){
+		for(int j = 0; j<Cache.wSetWay; j++){
+			*((int *)Cache.lruArray+(i*Cache.wSetWay)+j) = -1;
+		}
+	}
 	//have set, find way and put address there, then return way
 
 }
