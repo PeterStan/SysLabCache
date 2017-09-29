@@ -1,16 +1,14 @@
 #include <stdio.h>
 #include <assert.h>
-#include <stdlib.h>
+
 
 struct cache{
 int tagFieldLength;
-int setIndexFieldLength;
+int setNumFieldLength;
 int blockOffsetFieldLength;
 unsigned int **tagArray; 
 int **lruArray;
 };
-
-struct cache Cache;
 
 char* getNextAddress();
 int whichSet();

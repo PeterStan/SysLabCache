@@ -1,6 +1,36 @@
 #include "Cache.h"
 //#include "CacheTest.c"
 
+<<<<<<< HEAD
+int main(int argc, char *argv[]){
+	int hitRate;int k, l, c;
+	/*
+	assert(argv[1]>0);
+	assert(argv[2]>0);
+	assert(argv[3]>0);
+	assert(argv[4]>0);
+	*/
+	k = atoi(argv[1]); l = atoi(argv[2]); c = (*argv[3])-48;
+
+	/*
+	struct cache Cache;
+	Cache.setNumFieldLength = setIndexLength(k,l,c);
+	Cache.blockOffsetFieldLength = offsetLength(k,l,c);
+	Cache.tagFieldLength = (32 - Cache.setNumFieldLength - Cache.blockOffsetFieldLength);
+	*/
+
+
+	printf("Start, %d arguements: K:%d, L:%d, C:%d File: %s \n", argc, k, l, c, argv[4]);
+	
+
+	hitRate = readTrace(argv[4]);//gives segfault
+
+
+	printf("Done\n");
+	return 0;
+}
+=======
+>>>>>>> master
 
 //takes trace file and returns hit rate
 int readTrace(char *file){
@@ -20,12 +50,12 @@ int readTrace(char *file){
 int logBaseTwo(int quantity){
 	assert(quantity>0);
 	int x = 0;
-	int quotient = quantity/(2^x);
-	while(quotient>1){
+	while((quantity-(2^x))>0){
 		x++;
-		quotient = quantity/(2^x);
 	}
 	return x;
+	free(x);
+	free(quantity);
 }
 
 int lg(int x){//returns log base 2 of x, or -1 
@@ -76,7 +106,18 @@ int accessCache(int address){
 int buildCache(int k, int l, int c){
 	Cache.setIndexFieldLength = setIndexLength(k,l,c);
 	Cache.blockOffsetFieldLength = offsetLength(k,l,c);
+<<<<<<< HEAD
+	Cache.tagFieldLength = (32 - Cache.setNumFieldLength - Cache.blockOffsetFieldLength);
+	unsigned int **tagArray;
+	int **lruArray;
+	*tagArray = (*unsigned int) malloc(k*sizeof(*unsigned int));
+	tagArray = (unsigned int) malloc((c/(k*l)*sizeof(unsigned int));
+	*lruArray = (*int) malloc(k*sizeof(*int));
+	lruArray = (int) malloc((c/(k*l)*sizeof(int));
+
+=======
 	Cache.tagFieldLength = (32 - Cache.setIndexFieldLength - Cache.blockOffsetFieldLength);
+>>>>>>> master
 }
 
 //Outputs the number of bits in the set index  field of theaddress
