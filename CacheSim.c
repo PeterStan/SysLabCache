@@ -17,10 +17,16 @@ int readTrace(char *file){
 	fclose(fp);
 }
 
-//sets tag in array to 'tag', or if tag is 0 return tag at that index
+//sets tag in array to 'tag', or if tag is -1 return tag at that index
 int accessTagArray(int setIndex, int wayIndex, int tag){
-	
-	return 0;
+
+	if(tag == -1){
+		tag = *(*(Cache.tagArray+setIndex)+wayIndex);
+	}
+	else{
+		*(*(Cache.tagArray+setIndex)+wayIndex) = tag;
+	}
+	return tag;
 }
 
 int accessLRUArray(int setIndex, int wayIndex){
