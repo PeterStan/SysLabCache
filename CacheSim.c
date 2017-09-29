@@ -150,7 +150,6 @@ int main(int argc, char *argv[]){
 	int hitRate;int k, l, c;
 	k = atoi(argv[1]); l = atoi(argv[2]); c = (*argv[3])-48;
 
-
 	printf("Start, %d arguements: K:%d, L:%d, C:%d File: %s \n", argc, k, l, c, argv[4]);
 	
 
