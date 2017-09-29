@@ -77,36 +77,21 @@ int accessCache(int address){
 	return r;
 }
 
-<<<<<<< HEAD
 
-int buildCache(int k, int l, int c){
-	Cache.setIndexFieldLength = setIndexLength(k,l,c);
-	Cache.blockOffsetFieldLength = offsetLength(k,l,c);
-=======
-	//argv[1] = set associativity
-	//argv[2] = line size in bytes
-	//argv[3] = total cache size in kbytes
 int buildCache(){
 	Cache.setIndexFieldLength = setIndexLength();
 	Cache.blockOffsetFieldLength = offsetLength();
->>>>>>> c832ca113e43363f976eecde098e91393f867f7d
 	Cache.tagFieldLength = (32 - Cache.setIndexFieldLength - Cache.blockOffsetFieldLength);
 
-	Cache.tagArray = (unsigned int **) malloc(Chache.kSetAss*sizeof(unsigned int*));
+	Cache.tagArray = (unsigned int **) malloc(Cache.kSetAss*sizeof(unsigned int*));
 	*Cache.tagArray = (unsigned int*) malloc(Cache.wSetWay*sizeof(unsigned int));
 	Cache.lruArray = (int **) malloc(Cache.kSetAss*sizeof(int*));
 	*Cache.lruArray = (int*) malloc(Cache.wSetWay*sizeof(int));
 	
-<<<<<<< HEAD
-	for(int i = 0; i<k; i++){
-		for(int j = 0; j<(c/(l*k)); j++){
-			Cache.tagArray[i][j] = -1;
-			j++;
-=======
+
 	for(int i = 0; i<Cache.kSetAss; i++){
 		for(int j = 0; j<Cache.wSetWay; j++){
 			Cache.lruArray[i][j] = -1;
->>>>>>> c832ca113e43363f976eecde098e91393f867f7d
 		}
 	}
 
@@ -127,7 +112,7 @@ int setIndexLengthTest(){
 
 //Outputs  the  number  of  bits  in  the  line  o sbbet field  of  the address
 int offsetLength(){
-	int setLength = logBaseTwo((Cache.cSetSizeBytes*8000)/(Cache.wSetWay));
+	int setLength = lg((Cache.cSetSizeBytes*8000)/(Cache.wSetWay));
 	int offsetSize = lg(Cache.kSetAss);
 	assert((32 - setLength - offsetSize) > 0);
 	return offsetSize; 
@@ -154,18 +139,12 @@ int tagBitsTest(){
 // If there is a hit, this outputs the cache way in which the accessed line can be found; 
 //it returns -1 if there is a cache miss
 int hitWay(int address){
-<<<<<<< HEAD
-	int setBits = ((unsigned int)address) >> Cache.blockOffsetFieldLength;
-	
-	return 0;
-=======
 	int setIndex = whichSet(address);
 	int tag = tagBits(address);
 	for(int wayIndex = 0; wayIndex <= Cache.kSetAss; wayIndex++){
 		if(*(*(Cache.tagArray + setIndex) + wayIndex) == tag) return wayIndex;
 	}	
 	return -1;
->>>>>>> c832ca113e43363f976eecde098e91393f867f7d
 }
 
 int hitWayTest(){
