@@ -5,7 +5,8 @@
 
 //takes trace file and returns hit rate
 float readTrace(char *file){
-	int hits, accesses;
+	float hits, accesses;
+	hits = 0;accesses = 0;
 	 
 	unsigned int address;
 	FILE *fp;
@@ -14,6 +15,7 @@ float readTrace(char *file){
 	while( fscanf(fp, "%X", &address) != EOF){
 		printf("Address: %d, Tag: %d, Set: %d\t",address, tagBits(address), whichSet(address));
 		hits += accessCache(address);
+		printf("Hits:%f, Accesses: %f\n", hits, accesses);
 		Cache.MRU++;
 		accesses++;
 	}
@@ -21,7 +23,7 @@ float readTrace(char *file){
 	accesses = (double)accesses;
 	fclose(fp);
 	printf("Trace Read\n");
-	return hits/accesses;
+	return (hits/accesses);
 }
 
 //sets tag in array to t, or if t is -1 return tag at that index
@@ -108,9 +110,9 @@ int buildCache(){
 	Cache.lruArray = (int **) malloc(Cache.kSetAss*sizeof(unsigned int*));
 	for (int i=0; i < Cache.kSetAss; i++) *(Cache.lruArray + i) = (unsigned int*) malloc(Cache.wSetWay*sizeof(unsigned int));
 	
-
-	for(int i = 0; i<Cache.kSetAss; i++){
-		for(int j = 0; j<Cache.wSetWay; j++){
+	int i,j;
+	for(i = 0; i<Cache.kSetAss; i++){
+		for(j = 0; j<Cache.wSetWay; j++){
 			*((int *)Cache.lruArray+(i*Cache.wSetWay)+j) = -1;
 		}
 	}
