@@ -88,7 +88,7 @@ int accessCache(unsigned int address){
 
 	if(way >= 0){
 		printf("Hit\n");
-		r = updateOnHit(address);
+		r = updateOnHit(address, way);
 	}
 	else{
 		printf("Miss\n");
@@ -176,9 +176,9 @@ int hitWayTest(){
 }
 
 //Updates the tagArray and lruArray upon a hit.  This function is only called on a cache hit
-int updateOnHit(unsigned int address){
+int updateOnHit(unsigned int address, int way){
 	//update LRU only
-	accessLRUArray(whichSet(address), getWayIndex(address), 1);
+	accessLRUArray(whichSet(address), way, 1);
 	printf("Updated Hit at: %d\n", address);
 	return 1;
 }
