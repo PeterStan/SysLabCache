@@ -1,6 +1,68 @@
 #include "Cache.h"
 //#include "CacheTest.c"
 
+//Outputs the cache set in which the address falls
+int whichSet(unsigned int address){
+	int mask = ~(0xFFFFFFFF << Cache.setIndexFieldLength); //generate mask for unwanted tag bits
+  	address = address >> Cache.blockOffsetFieldLength; //shift to eliminate offset bits
+  	return address & mask;
+}
+
+//Outputs the number of bits in the set index  field of theaddress
+int setIndexLength(){
+	int setLength = lg(Cache.wSetWay);//logbase2 of # of sets
+	int offsetSize = lg(Cache.kSetAss);//logbase2 of # of ways per set
+	assert((32 - setLength - offsetSize) > 0);//make sure the index and offset sizes dont exceed 32
+	return setLength;
+}
+
+//Outputs  the  number  of  bits  in  the  line  o sbbet field  of  the address
+int offsetLength(){
+	//same as setIndexLength() but output the offset instead
+	int setLength = lg(Cache.wSetWay);
+	int offsetSize = lg(Cache.kSetAss);
+	assert((32 - setLength - offsetSize) > 0);
+	return offsetSize; 
+}
+
+//Outputs the tag bits associated with the address
+int tagBits(unsigned int address){	
+	int shift = Cache.blockOffsetFieldLength + Cache.setIndexFieldLength;
+	assert(shift < 32); 
+	address = address >> (shift); //shift right by setindex and offset bits to retrieve the tag
+	return address;
+}
+
+// If there is a hit, this outputs the cache way in which the accessed line can be found; 
+//it returns -1 if there is a cache miss
+int hitWay(unsigned int address){
+	int setIndex = whichSet(address);
+	int tag = tagBits(address);
+	int wayIndex;
+	for(wayIndex = 0; wayIndex < Cache.kSetAss; wayIndex++){
+		if(accessTagArray(setIndex, wayIndex, -1) == tag) return wayIndex;
+	}	//loop checks each way in a set, if the tag matches, returns the way
+	return -1;
+}
+
+//Updates the tagArray and lruArray upon a hit.  This function is only called on a cache hit
+int updateOnHit(unsigned int address, int way){
+	accessLRUArray(whichSet(address), way, 1);
+	return 1;
+}
+
+// Updates the tagArray and lruArray upon a miss.  This function is only called on a cache miss
+int updateOnMiss(unsigned int address){
+	int way,set;
+	
+	set = whichSet(address);
+	way = findLRU(set);
+
+	accessLRUArray(set,way,1);
+	accessTagArray(set,way, tagBits(address));
+
+	return 0;
+}
 
 //takes trace file and returns hit rate
 double readTrace(char *file){
@@ -55,13 +117,6 @@ int lg(int x){//returns log base 2 of x, or -1
 	return i;
 }
 
-//Outputs the cache set in which the address falls
-int whichSet(unsigned int address){
-	int mask = ~(0xFFFFFFFF << Cache.setIndexFieldLength); //generate mask for unwanted tag bits
-  	address = address >> Cache.blockOffsetFieldLength; //shift to eliminate offset bits
-  	return address & mask;
-}
-
 //returns 0 or 1 based on wether it is a hit or miss
 int accessCache(unsigned int address){
 	int way, setIndex, r;
@@ -101,66 +156,6 @@ int buildCache(){
 		}
 	}
 	//printf("Cache Built\n");
-}
-
-//Outputs the number of bits in the set index  field of theaddress
-int setIndexLength(){
-	int setLength = lg(Cache.wSetWay);//logbase2 of # of sets
-	int offsetSize = lg(Cache.kSetAss);//logbase2 of # of ways per set
-	assert((32 - setLength - offsetSize) > 0);//make sure the index and offset sizes dont exceed 32
-	return setLength;
-}
-
-//Outputs  the  number  of  bits  in  the  line  o sbbet field  of  the address
-int offsetLength(){
-	//same as setIndexLength() but output the offset instead
-	int setLength = lg(Cache.wSetWay);
-	int offsetSize = lg(Cache.kSetAss);
-	assert((32 - setLength - offsetSize) > 0);
-	return offsetSize; 
-}
-
-//Outputs the tag bits associated with the address
-int tagBits(unsigned int address){	
-	int shift = Cache.blockOffsetFieldLength + Cache.setIndexFieldLength;
-	assert(shift < 32); 
-	address = address >> (shift); //shift right by setindex and offset bits to retrieve the tag
-	return address;
-}
-
-// If there is a hit, this outputs the cache way in which the accessed line can be found; 
-//it returns -1 if there is a cache miss
-int hitWay(unsigned int address){
-	int setIndex = whichSet(address);
-	int tag = tagBits(address);
-	int wayIndex;
-	for(wayIndex = 0; wayIndex < Cache.kSetAss; wayIndex++){
-		if(accessTagArray(setIndex, wayIndex, -1) == tag) return wayIndex;
-	}	//loop checks each way in a set, if the tag matches, returns the way
-	return -1;
-}
-
-int hitWayTest(){
-	return 0;
-}
-
-//Updates the tagArray and lruArray upon a hit.  This function is only called on a cache hit
-int updateOnHit(unsigned int address, int way){
-	accessLRUArray(whichSet(address), way, 1);
-	return 1;
-}
-
-// Updates the tagArray and lruArray upon a miss.  This function is only called on a cache miss
-int updateOnMiss(unsigned int address){
-	int way,set;
-	
-	set = whichSet(address);
-	way = findLRU(set);
-
-	accessLRUArray(set,way,1);
-	accessTagArray(set,way, tagBits(address));
-
-	return 0;
 }
 
 //returns way of the least recently used place in the cache
