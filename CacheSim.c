@@ -153,7 +153,6 @@ int updateOnHit(unsigned int address, int way){
 	return 1;
 }
 
-
 // Updates the tagArray and lruArray upon a miss.  This function is only called on a cache miss
 int updateOnMiss(unsigned int address){
 	int way,set;
@@ -192,31 +191,6 @@ int findLRU(int set){
 	//have set, find least recently used in LRUArray, return way
 
 }
-
-/*int printLRUArray(){
-	int i;
-	int j;
-	for(i = 0; i<Cache.wSetWay; i++){
-		for(j = 0; j<Cache.kSetAss; j++){
-			printf("%d\t", (*((int *)Cache.lruArray+i*Cache.kSetAss+j)));
-		}
-		printf("\n");
-	}
-	printf("lruArray Printed\n");
-	return 0;
-}
-
-int printTagArray(){
-	int i;
-	int j;
-	for(i = 0; i<Cache.wSetWay; i++){
-		for(j = 0; j<Cache.kSetAss; j++){
-			printf("%d\t", (*((int *)Cache.tagArray+i*Cache.kSetAss+j)));
-		}
-		printf("\n");
-	}
-	return 0;
-}*/
  
 	//argv[1] = set associativity
 	//argv[2] = line size in bytes
