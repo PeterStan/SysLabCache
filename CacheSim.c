@@ -65,6 +65,7 @@ int updateOnMiss(unsigned int address){
 }
 
 //takes trace file and returns hit rate
+//called by main()
 double readTrace(char *file){
 	double hits, accesses;
 	hits = 0;accesses = 0;
@@ -82,6 +83,7 @@ double readTrace(char *file){
 }
 
 //sets tag in array to t, or if t is -1 return tag at that index
+//called by hitWay() and updateOnMiss()
 int accessTagArray(int setIndex, int wayIndex, int t){
 
 	if(t == -1){
@@ -94,6 +96,7 @@ int accessTagArray(int setIndex, int wayIndex, int t){
 }
 
 //increments Lru value at position if 1, or just returns value if -1
+//called by updateOnMiss() and updateOnHit()
 int accessLRUArray(int setIndex, int wayIndex, int t){
 
 	if(t == -1){
@@ -106,7 +109,10 @@ int accessLRUArray(int setIndex, int wayIndex, int t){
 	return 0;
 }
 
-int lg(int x){//returns log base 2 of x, rounding up 
+//returns log base 2 of x, rounding up 
+//called by setIndexLenth() and offsetLength()
+int lg(int x){
+
 	int i;
 	for(i = 1; (1<<i) <= x; i++)
 		if(x == (1<<i))return i;
@@ -114,6 +120,7 @@ int lg(int x){//returns log base 2 of x, rounding up
 }
 
 //returns 0 or 1 based on wether it is a hit or miss
+//called by readTrace(), readTrace() is called by main()
 int accessCache(unsigned int address){
 	int way, setIndex, r;
 
@@ -129,6 +136,7 @@ int accessCache(unsigned int address){
 	return r;
 }
 
+//called by main()
 int buildCache(){
 	Cache.setIndexFieldLength = setIndexLength();
 	Cache.blockOffsetFieldLength = offsetLength();
@@ -157,6 +165,7 @@ int buildCache(){
 
 //returns way of the least recently used place in the cache
 //have set, find least recently used in LRUArray, return way
+//called by updateOnMiss()
 int findLRU(int set){
 	int lowest,lWay;
 	lowest = 0;lWay = 0;
