@@ -1,101 +1,11 @@
 #include "Cache.h"
 //#include "CacheTest.c"
 
-
-//takes trace file and returns hit rate
-double readTrace(char *file){
-	double hits, accesses;
-	hits = 0;accesses = 0;
-	 
-	unsigned int address;
-	FILE *fp;
-	fp = fopen(file, "r+");
-
-	while( fscanf(fp, "%X", &address) != EOF){
-		hits += accessCache(address);
-		Cache.MRU++;accesses++;
-	}
-	fclose(fp);
-	return 1 - (hits/accesses);
-}
-
-//sets tag in array to t, or if t is -1 return tag at that index
-int accessTagArray(int setIndex, int wayIndex, int t){
-
-	if(t == -1){
-		t = (*((int *)Cache.tagArray+setIndex*Cache.kSetAss+wayIndex));
-	}
-	else{
-		*((int *)Cache.tagArray+(setIndex*Cache.kSetAss)+wayIndex) = t;
-	}
-	return t;
-}
-
-//increments Lru value at position if 1, or just returns value if -1
-int accessLRUArray(int setIndex, int wayIndex, int t){
-
-	if(t == -1){
-		return (*((int *)Cache.lruArray+setIndex*Cache.kSetAss+wayIndex));
-	}
-	else if(t == 1){
-		(*((int *)Cache.lruArray+setIndex*Cache.kSetAss+wayIndex)) = Cache.MRU;
-		return (*((int *)Cache.lruArray+setIndex*Cache.kSetAss+wayIndex));
-	}
-	return 0;
-}
-
-int lg(int x){//returns log base 2 of x, or -1 
-	int i;
-	for(i = 1; (1<<i) <= x; i++)
-		if(x == (1<<i))return i;
-	return i;
-}
-
 //Outputs the cache set in which the address falls
 int whichSet(unsigned int address){
 	int mask = ~(0xFFFFFFFF << Cache.setIndexFieldLength); //generate mask for unwanted tag bits
   	address = address >> Cache.blockOffsetFieldLength; //shift to eliminate offset bits
   	return address & mask;
-}
-
-//returns 0 or 1 based on wether it is a hit or miss
-int accessCache(unsigned int address){
-	int way, setIndex, r;
-
-	setIndex = whichSet(address);
-	way = hitWay(address);
-
-	if(way >= 0){
-		r = updateOnHit(address, way);
-	}
-	else{
-		r = updateOnMiss(address);
-	}
-	return r;
-}
-
-int buildCache(){
-	Cache.setIndexFieldLength = setIndexLength();
-	Cache.blockOffsetFieldLength = offsetLength();
-	Cache.tagFieldLength = (32 - Cache.setIndexFieldLength - Cache.blockOffsetFieldLength);
-	Cache.MRU = 0;
-	int i,j;
-
-	Cache.tagArray = (unsigned int **) malloc(Cache.wSetWay*sizeof(unsigned int*));
-	for (i=0; i < Cache.wSetWay; i++){
-		*(Cache.tagArray + i) = (unsigned int*) malloc(Cache.kSetAss*sizeof(unsigned int));
-	}
-	Cache.lruArray = (int **) malloc(Cache.wSetWay*sizeof(unsigned int*));
-	for (i=0; i < Cache.wSetWay; i++){ 
-		*(Cache.lruArray + i) = (unsigned int*) malloc(Cache.kSetAss*sizeof(unsigned int));
-	}
-
-	//intializing all values in the LRU array to -1
-	for(i = 0; i<Cache.wSetWay; i++){
-		for(j = 0; j<Cache.kSetAss; j++){
-			*((int *)Cache.lruArray+(i*Cache.kSetAss)+j) = -1;
-		}
-	}
 }
 
 //Outputs the number of bits in the set index  field of theaddress
@@ -146,13 +56,104 @@ int updateOnMiss(unsigned int address){
 	int way,set;
 	
 	set = whichSet(address);
-	way = findLRU(set); //find the LRU location in the set
+	way = findLRU(set);
 
-	accessLRUArray(set,way,1); //increment LRU array
-	accessTagArray(set,way, tagBits(address));//Put tag into tag array
+	accessLRUArray(set,way,1);
+	accessTagArray(set,way, tagBits(address));
 
 	return 0;
 }
+
+//takes trace file and returns hit rate
+double readTrace(char *file){
+	double hits, accesses;
+	hits = 0;accesses = 0;
+	 
+	unsigned int address;
+	FILE *fp;
+	fp = fopen(file, "r+");
+
+	while( fscanf(fp, "%X", &address) != EOF){
+		hits += accessCache(address);
+		Cache.MRU++;accesses++;
+	}
+	fclose(fp);
+	return 1 - (hits/accesses);
+}
+
+//sets tag in array to t, or if t is -1 return tag at that index
+int accessTagArray(int setIndex, int wayIndex, int t){
+
+	if(t == -1){
+		t = (*((int *)Cache.tagArray+setIndex*Cache.kSetAss+wayIndex));
+	}
+	else{
+		*((int *)Cache.tagArray+(setIndex*Cache.kSetAss)+wayIndex) = t;
+	}
+	return t;
+}
+
+//increments Lru value at position if 1, or just returns value if -1
+int accessLRUArray(int setIndex, int wayIndex, int t){
+
+	if(t == -1){
+		return (*((int *)Cache.lruArray+setIndex*Cache.kSetAss+wayIndex));
+	}
+	else if(t == 1){
+		(*((int *)Cache.lruArray+setIndex*Cache.kSetAss+wayIndex)) = Cache.MRU;
+		return (*((int *)Cache.lruArray+setIndex*Cache.kSetAss+wayIndex));
+	}
+	return 0;
+}
+
+int lg(int x){//returns log base 2 of x, rounding up 
+	int i;
+	for(i = 1; (1<<i) <= x; i++)
+		if(x == (1<<i))return i;
+	return i;
+}
+
+//returns 0 or 1 based on wether it is a hit or miss
+int accessCache(unsigned int address){
+	int way, setIndex, r;
+
+	setIndex = whichSet(address);
+	way = hitWay(address);
+
+	if(way >= 0){
+		r = updateOnHit(address, way);
+	}
+	else{
+		r = updateOnMiss(address);
+	}
+	return r;
+}
+
+int buildCache(){
+	Cache.setIndexFieldLength = setIndexLength();
+	Cache.blockOffsetFieldLength = offsetLength();
+	Cache.tagFieldLength = (32 - Cache.setIndexFieldLength - Cache.blockOffsetFieldLength);
+	Cache.MRU = 0;
+	int i,j;
+
+	//allocate space for LRUArray and TagArray
+	Cache.tagArray = (unsigned int **) malloc(Cache.wSetWay*sizeof(unsigned int*));
+	for (i=0; i < Cache.wSetWay; i++){
+		*(Cache.tagArray + i) = (unsigned int*) malloc(Cache.kSetAss*sizeof(unsigned int));
+	}
+	Cache.lruArray = (int **) malloc(Cache.wSetWay*sizeof(unsigned int*));
+	for (i=0; i < Cache.wSetWay; i++){ 
+		*(Cache.lruArray + i) = (unsigned int*) malloc(Cache.kSetAss*sizeof(unsigned int));
+	}
+
+	//intializing all values in the LRU array to -1
+	for(i = 0; i<Cache.wSetWay; i++){
+		for(j = 0; j<Cache.kSetAss; j++){
+			*((int *)Cache.lruArray+(i*Cache.kSetAss)+j) = -1;
+		}
+	}
+}
+
 
 //returns way of the least recently used place in the cache
 //have set, find least recently used in LRUArray, return way
@@ -189,7 +190,7 @@ int main(int argc, char *argv[]){
 	buildCache();
 	missRate = readTrace(argv[4]);
 
-	printf("%s \t %d \t %d \t %d \t %.2f\n",argv[4], c, k, l, missRate);
+	printf("%s %d %d %d %.2f\n",argv[4], c, k, l, missRate);
 	return 0;
 }
 
