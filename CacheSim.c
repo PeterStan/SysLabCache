@@ -85,6 +85,8 @@ double readTrace(char *file){
 //sets tag in array to t, or if t is -1 return tag at that index
 //called by hitWay() and updateOnMiss()
 int accessTagArray(int setIndex, int wayIndex, int t){
+	assert(setIndex<=Cache.wSetWay);
+	assert(wayIndex<=Cache.kSetAss);
 
 	if(t == -1){
 		t = (*((int *)Cache.tagArray+setIndex*Cache.kSetAss+wayIndex));
