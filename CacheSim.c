@@ -85,8 +85,7 @@ double readTrace(char *file){
 //sets tag in array to t, or if t is -1 return tag at that index
 //called by hitWay() and updateOnMiss()
 int accessTagArray(int setIndex, int wayIndex, int t){
-	assert(setIndex<=Cache.wSetWay);
-	assert(wayIndex<=Cache.kSetAss);
+	assert(setIndex<=Cache.wSetWay); assert(wayIndex<=Cache.kSetAss);
 
 	if(t == -1){
 		t = (*((int *)Cache.tagArray+setIndex*Cache.kSetAss+wayIndex));
@@ -100,8 +99,7 @@ int accessTagArray(int setIndex, int wayIndex, int t){
 //increments Lru value at position if 1, or just returns value if -1
 //called by updateOnMiss() and updateOnHit()
 int accessLRUArray(int setIndex, int wayIndex, int t){
-	assert(setIndex<=Cache.wSetWay);
-	assert(wayIndex<=Cache.kSetAss);
+	assert(setIndex<=Cache.wSetWay); assert(wayIndex<=Cache.kSetAss);
 
 	if(t == -1){
 		return (*((int *)Cache.lruArray+setIndex*Cache.kSetAss+wayIndex));
@@ -197,8 +195,6 @@ int main(int argc, char *argv[]){
 	k = atoi(argv[1]); l = atoi(argv[2]); c = atoi(argv[3]);
 	Cache.kSetAss = k;Cache.lSetLength = l;Cache.cSetSizeBytes = c;Cache.wSetWay = (c*1000)/(k*l);
 
-	//printf("Start, %d arguements: K:%d, L:%d, C:%d File: %s \n", argc, k, l, c, argv[4]);	
-	//printf("kSetAss: %d, lSetLength: %d, cSetSizeBytes: %d, wSetWay: %d\n", Cache.kSetAss, Cache.lSetLength, Cache.cSetSizeBytes, Cache.wSetWay);
 
 	buildCache();
 	missRate = readTrace(argv[4]);
