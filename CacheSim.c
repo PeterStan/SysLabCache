@@ -202,7 +202,7 @@ int updateOnMiss(unsigned int address){
 int findLRU(int set){
 	int lowest,lWay;
 	lowest = 0;lWay = 0;
-	printf("SET:%d\n", set);
+
 	int i;
 	for(i = 0; i < Cache.wSetWay; i++){
 
@@ -211,7 +211,7 @@ int findLRU(int set){
 			lowest = *((int *)Cache.lruArray+(set*Cache.wSetWay)+i);
 			//printf("Lowest: %d\n", lWay);
 		}
-		printf("Set: %d, L Way: %d, Lowest: %d\n", set, lWay, lowest);
+		//printf("Set: %d, L Way: %d, Lowest: %d\n", set, lWay, lowest);
 	}
 
 	printf("Found LRU\n");
@@ -221,8 +221,7 @@ int findLRU(int set){
 }
 
 int printLRUArray(){
-	int i;
-	int j;
+	int i,j;
 	for(i = 0; i<Cache.wSetWay; i++){
 		for(j = 0; j<Cache.kSetAss; j++){
 			printf("%d\t", (*((int *)Cache.lruArray+i*Cache.kSetAss+j)));
@@ -234,8 +233,7 @@ int printLRUArray(){
 }
 
 int printTagArray(){
-	int i;
-	int j;
+	int i,j;
 	for(i = 0; i<Cache.wSetWay; i++){
 		for(j = 0; j<Cache.kSetAss; j++){
 			printf("%d\t", (*((int *)Cache.tagArray+i*Cache.kSetAss+j)));
