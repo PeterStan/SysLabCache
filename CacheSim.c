@@ -100,6 +100,8 @@ int accessTagArray(int setIndex, int wayIndex, int t){
 //increments Lru value at position if 1, or just returns value if -1
 //called by updateOnMiss() and updateOnHit()
 int accessLRUArray(int setIndex, int wayIndex, int t){
+	assert(setIndex<=Cache.wSetWay);
+	assert(wayIndex<=Cache.kSetAss);
 
 	if(t == -1){
 		return (*((int *)Cache.lruArray+setIndex*Cache.kSetAss+wayIndex));
