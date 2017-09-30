@@ -18,26 +18,26 @@ int **lruArray;
 
 struct cache Cache;
 
-int whichSet(); //done
+int whichSet(); 
 int setIndexLength();
 int offsetLength();
-int tagBits();///works well
+int tagBits();
 int hitWay();
-int updateOnHit();//done, Not tested
+int updateOnHit();
 int updateOnMiss();
-double readTrace(char *file); //done, and tested
+double readTrace(char *file); 
 int accessCache();
-int buildCache(); //done, kinda tested
-int findLRU(int set); //done, kinda tested
+int buildCache(); 
+int findLRU(int set); 
+int lg(int x);
 
-int accessTagArray(int setIndex, int wayIndex, int t); //done, kinda tested
-int accessLRUArray(int setIndex, int wayIndex, int t); //done, kinda tested
+int accessTagArray(int setIndex, int wayIndex, int t); 
+int accessLRUArray(int setIndex, int wayIndex, int t);
 int getSetIndex();
 int getWayIndex();
 
 /*
 int getWayIndex(int address);
-int lg(int x);  //done
 int whichSet(int address);
 int whichSetTest();
 int accessCache(int address);

@@ -109,9 +109,10 @@ int accessLRUArray(int setIndex, int wayIndex, int t){
 	return 0;
 }
 
-//returns log base 2 of x, or -1
+//returns log base 2 of x, rounding up 
 //called by setIndexLenth() and offsetLength()
-int lg(int x){ 
+int lg(int x){
+
 	int i;
 	for(i = 1; (1<<i) <= x; i++)
 		if(x == (1<<i))return i;
@@ -143,6 +144,7 @@ int buildCache(){
 	Cache.MRU = 0;
 	int i,j;
 
+	//allocate space for LRUArray and TagArray
 	Cache.tagArray = (unsigned int **) malloc(Cache.wSetWay*sizeof(unsigned int*));
 	for (i=0; i < Cache.wSetWay; i++){
 		*(Cache.tagArray + i) = (unsigned int*) malloc(Cache.kSetAss*sizeof(unsigned int));
@@ -159,6 +161,7 @@ int buildCache(){
 		}
 	}
 }
+
 
 //returns way of the least recently used place in the cache
 //have set, find least recently used in LRUArray, return way
@@ -196,7 +199,7 @@ int main(int argc, char *argv[]){
 	buildCache();
 	missRate = readTrace(argv[4]);
 
-	printf("%s \t %d \t %d \t %d \t %.2f\n",argv[4], c, k, l, missRate);
+	printf("%s %d %d %d %.2f\n",argv[4], c, k, l, missRate);
 	return 0;
 }
 
