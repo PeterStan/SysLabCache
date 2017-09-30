@@ -74,14 +74,10 @@ double readTrace(char *file){
 	fp = fopen(file, "r+");
 
 	while( fscanf(fp, "%X", &address) != EOF){
-		//printf("Address: %d, Tag: %d, Set: %d\t",address, tagBits(address), whichSet(address));
 		hits += accessCache(address);
-		//printf("Hits:%f, Accesses: %f\n", hits, accesses);
-		Cache.MRU++;
-		accesses++;
+		Cache.MRU++;accesses++;
 	}
 	fclose(fp);
-	//printf("Trace Read\n");
 	return 1 - (hits/accesses);
 }
 
@@ -125,11 +121,9 @@ int accessCache(unsigned int address){
 	way = hitWay(address);
 
 	if(way >= 0){
-		//printf("Hit\n");
 		r = updateOnHit(address, way);
 	}
 	else{
-		//printf("Miss\n");
 		r = updateOnMiss(address);
 	}
 	return r;
@@ -150,15 +144,17 @@ int buildCache(){
 	for (i=0; i < Cache.wSetWay; i++){ 
 		*(Cache.lruArray + i) = (unsigned int*) malloc(Cache.kSetAss*sizeof(unsigned int));
 	}
+
+	//intializing all values in the LRU array to -1
 	for(i = 0; i<Cache.wSetWay; i++){
 		for(j = 0; j<Cache.kSetAss; j++){
 			*((int *)Cache.lruArray+(i*Cache.kSetAss)+j) = -1;
 		}
 	}
-	//printf("Cache Built\n");
 }
 
 //returns way of the least recently used place in the cache
+//have set, find least recently used in LRUArray, return way
 int findLRU(int set){
 	int lowest,lWay;
 	lowest = 0;lWay = 0;
@@ -172,10 +168,7 @@ int findLRU(int set){
 		}
 	}
 
-	//printf("Found LRU\n");
 	return lWay;
-	//have set, find least recently used in LRUArray, return way
-
 }
  
 	//argv[1] = set associativity
@@ -193,14 +186,9 @@ int main(int argc, char *argv[]){
 	//printf("kSetAss: %d, lSetLength: %d, cSetSizeBytes: %d, wSetWay: %d\n", Cache.kSetAss, Cache.lSetLength, Cache.cSetSizeBytes, Cache.wSetWay);
 
 	buildCache();
-
-
-
 	missRate = readTrace(argv[4]);
 
-
-
-	printf("%s, %d, %d, %d, Miss Rate: %f\n",argv[4], c, k, l, missRate);
+	printf("%s \t %d \t %d \t %d \t %.2f\n",argv[4], c, k, l, missRate);
 	return 0;
 }
 
