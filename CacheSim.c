@@ -1,7 +1,7 @@
 #include "Cache.h"
 //#include "CacheTest.c"
 
-
+//peterChange
 
 //takes trace file and returns hit rate
 
