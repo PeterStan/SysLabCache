@@ -4,7 +4,11 @@
 
 
 //takes trace file and returns hit rate
+<<<<<<< Updated upstream
 double readTrace(char *file){
+=======
+float readTrace(char *file){
+>>>>>>> Stashed changes
 	double hits, accesses;
 	hits = 0;accesses = 0;
 	 
@@ -19,8 +23,6 @@ double readTrace(char *file){
 		Cache.MRU++;
 		accesses++;
 	}
-	hits = (double)hits;
-	accesses = (double)accesses;
 	fclose(fp);
 	printf("Trace Read\n");
 	return (hits/accesses);
