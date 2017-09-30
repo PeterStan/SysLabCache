@@ -146,10 +146,10 @@ int updateOnMiss(unsigned int address){
 	int way,set;
 	
 	set = whichSet(address);
-	way = findLRU(set);
+	way = findLRU(set); //find the LRU location in the set
 
-	accessLRUArray(set,way,1);
-	accessTagArray(set,way, tagBits(address));
+	accessLRUArray(set,way,1); //increment LRU array
+	accessTagArray(set,way, tagBits(address));//Put tag into tag array
 
 	return 0;
 }
