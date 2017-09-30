@@ -140,10 +140,6 @@ int hitWay(unsigned int address){
 	return -1;
 }
 
-int hitWayTest(){
-	return 0;
-}
-
 //Updates the tagArray and lruArray upon a hit.  This function is only called on a cache hit
 int updateOnHit(unsigned int address, int way){
 	accessLRUArray(whichSet(address), way, 1);
@@ -198,14 +194,9 @@ int main(int argc, char *argv[]){
 	//printf("kSetAss: %d, lSetLength: %d, cSetSizeBytes: %d, wSetWay: %d\n", Cache.kSetAss, Cache.lSetLength, Cache.cSetSizeBytes, Cache.wSetWay);
 
 	buildCache();
-
-
-
 	missRate = readTrace(argv[4]);
 
-
-
-	printf("%s, %d, %d, %d, Miss Rate: %f\n",argv[4], c, k, l, missRate);
+	printf("%s \t %d \t %d \t %d \t %.2f\n",argv[4], c, k, l, missRate);
 	return 0;
 }
 
