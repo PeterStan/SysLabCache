@@ -19,7 +19,8 @@ double readTrace(char *file){
 		Cache.MRU++;
 		accesses++;
 	}
-
+	hits = (double)hits;
+	accesses = (double)accesses;
 	fclose(fp);
 	printf("Trace Read\n");
 	return (hits/accesses);
@@ -161,7 +162,8 @@ int tagBitsTest(){
 int hitWay(unsigned int address){
 	int setIndex = whichSet(address);
 	int tag = tagBits(address);
-	for(int wayIndex = 0; wayIndex <= Cache.kSetAss; wayIndex++){
+	int wayIndex;
+	for(wayIndex = 0; wayIndex < Cache.kSetAss; wayIndex++){
 		if(accessTagArray(setIndex, wayIndex, -1) == tag) return wayIndex;
 	}	
 	return -1;
@@ -202,8 +204,8 @@ int findLRU(int set){
 	int lowest,lWay;
 	lowest = 0;lWay = 0;
 	printf("SET:%d\n", set);
-
-	for(int i = 0; i < Cache.wSetWay; i++){
+	int i;
+	for(i = 0; i < Cache.wSetWay; i++){
 
 		if(*((int *)Cache.lruArray+(set*Cache.wSetWay)+i) < lowest){
 			lWay = i;
@@ -220,8 +222,10 @@ int findLRU(int set){
 }
 
 int printLRUArray(){
-	for(int i = 0; i<Cache.wSetWay; i++){
-		for(int j = 0; j<Cache.kSetAss; j++){
+	int i;
+	int j;
+	for(i = 0; i<Cache.wSetWay; i++){
+		for(j = 0; j<Cache.kSetAss; j++){
 			printf("%d\t", (*((int *)Cache.lruArray+i*Cache.kSetAss+j)));
 		}
 		printf("\n");
@@ -231,8 +235,10 @@ int printLRUArray(){
 }
 
 int printTagArray(){
-	for(int i = 0; i<Cache.wSetWay; i++){
-		for(int j = 0; j<Cache.kSetAss; j++){
+	int i;
+	int j;
+	for(i = 0; i<Cache.wSetWay; i++){
+		for(j = 0; j<Cache.kSetAss; j++){
 			printf("%d\t", (*((int *)Cache.tagArray+i*Cache.kSetAss+j)));
 		}
 		printf("\n");
