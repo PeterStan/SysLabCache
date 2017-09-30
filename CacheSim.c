@@ -12,14 +12,14 @@ double readTrace(char *file){
 	fp = fopen(file, "r+");
 
 	while( fscanf(fp, "%X", &address) != EOF){
-		printf("Address: %d, Tag: %d, Set: %d\t",address, tagBits(address), whichSet(address));
+		//printf("Address: %d, Tag: %d, Set: %d\t",address, tagBits(address), whichSet(address));
 		hits += accessCache(address);
-		printf("Hits:%f, Accesses: %f\n", hits, accesses);
+		//printf("Hits:%f, Accesses: %f\n", hits, accesses);
 		Cache.MRU++;
 		accesses++;
 	}
 	fclose(fp);
-	printf("Trace Read\n");
+	//printf("Trace Read\n");
 	return 1 - (hits/accesses);
 }
 
@@ -68,14 +68,13 @@ int accessCache(unsigned int address){
 
 	setIndex = whichSet(address);
 	way = hitWay(address);
-	printf("Way: %d, Set: %d\n", way, setIndex);
 
 	if(way >= 0){
-		printf("Hit\n");
+		//printf("Hit\n");
 		r = updateOnHit(address, way);
 	}
 	else{
-		printf("Miss\n");
+		//printf("Miss\n");
 		r = updateOnMiss(address);
 	}
 	return r;
@@ -101,7 +100,7 @@ int buildCache(){
 			*((int *)Cache.lruArray+(i*Cache.kSetAss)+j) = -1;
 		}
 	}
-	printf("Cache Built\n");
+	//printf("Cache Built\n");
 }
 
 //Outputs the number of bits in the set index  field of theaddress
@@ -147,9 +146,7 @@ int hitWayTest(){
 
 //Updates the tagArray and lruArray upon a hit.  This function is only called on a cache hit
 int updateOnHit(unsigned int address, int way){
-	//update LRU only
 	accessLRUArray(whichSet(address), way, 1);
-	printf("Updated Hit at: %d\n", address);
 	return 1;
 }
 
@@ -157,10 +154,6 @@ int updateOnHit(unsigned int address, int way){
 // Updates the tagArray and lruArray upon a miss.  This function is only called on a cache miss
 int updateOnMiss(unsigned int address){
 	int way,set;
-	
-	printf("Updating Miss at: %X\n", address);
-
-
 	
 	set = whichSet(address);
 	way = findLRU(set);
@@ -175,48 +168,21 @@ int updateOnMiss(unsigned int address){
 int findLRU(int set){
 	int lowest,lWay;
 	lowest = 0;lWay = 0;
-	printf("SET:%d\n", set);
+
 	int i;
 	for(i = 0; i < Cache.kSetAss; i++){
 
 		if(*((int *)Cache.lruArray+(set*Cache.kSetAss)+i) < lowest){
 			lWay = i;
 			lowest = *((int *)Cache.lruArray+(set*Cache.kSetAss)+i);
-			//printf("Lowest: %d\n", lWay);
 		}
-		printf("Set: %d, L Way: %d, Lowest: %d\n", set, lWay, lowest);
 	}
 
-	printf("Found LRU\n");
+	//printf("Found LRU\n");
 	return lWay;
 	//have set, find least recently used in LRUArray, return way
 
 }
-
-/*int printLRUArray(){
-	int i;
-	int j;
-	for(i = 0; i<Cache.wSetWay; i++){
-		for(j = 0; j<Cache.kSetAss; j++){
-			printf("%d\t", (*((int *)Cache.lruArray+i*Cache.kSetAss+j)));
-		}
-		printf("\n");
-	}
-	printf("lruArray Printed\n");
-	return 0;
-}
-
-int printTagArray(){
-	int i;
-	int j;
-	for(i = 0; i<Cache.wSetWay; i++){
-		for(j = 0; j<Cache.kSetAss; j++){
-			printf("%d\t", (*((int *)Cache.tagArray+i*Cache.kSetAss+j)));
-		}
-		printf("\n");
-	}
-	return 0;
-}*/
  
 	//argv[1] = set associativity
 	//argv[2] = line size in bytes
@@ -229,8 +195,8 @@ int main(int argc, char *argv[]){
 	k = atoi(argv[1]); l = atoi(argv[2]); c = atoi(argv[3]);
 	Cache.kSetAss = k;Cache.lSetLength = l;Cache.cSetSizeBytes = c;Cache.wSetWay = (c*1000)/(k*l);
 
-	printf("Start, %d arguements: K:%d, L:%d, C:%d File: %s \n", argc, k, l, c, argv[4]);	
-	printf("kSetAss: %d, lSetLength: %d, cSetSizeBytes: %d, wSetWay: %d\n", Cache.kSetAss, Cache.lSetLength, Cache.cSetSizeBytes, Cache.wSetWay);
+	//printf("Start, %d arguements: K:%d, L:%d, C:%d File: %s \n", argc, k, l, c, argv[4]);	
+	//printf("kSetAss: %d, lSetLength: %d, cSetSizeBytes: %d, wSetWay: %d\n", Cache.kSetAss, Cache.lSetLength, Cache.cSetSizeBytes, Cache.wSetWay);
 
 	buildCache();
 
@@ -240,8 +206,7 @@ int main(int argc, char *argv[]){
 
 
 
-	printf("Miss Rate: %f\n", missRate);
-	printf("Done\n");
+	printf("%s, %d, %d, %d, Miss Rate: %f\n",argv[4], c, k, l, missRate);
 	return 0;
 }
 
