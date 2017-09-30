@@ -252,7 +252,7 @@ int printTagArray(){
 int main(int argc, char *argv[]){
 	assert(argv[1]>0);assert(argv[2]>0);assert(argv[3]>0);assert(argv[4]>0);
 
-	float hitRate;int k, l, c;
+	float missRate;int k, l, c;
 	k = atoi(argv[1]); l = atoi(argv[2]); c = atoi(argv[3]);
 	Cache.kSetAss = k;Cache.lSetLength = l;Cache.cSetSizeBytes = c;Cache.wSetWay = (c*1000)/(k*l);
 
@@ -263,11 +263,11 @@ int main(int argc, char *argv[]){
 
 
 
-	hitRate = readTrace(argv[4]);
+	missRate = readTrace(argv[4]);
 
 
 
-	printf("Miss Rate: %f\n", hitRate);
+	printf("Miss Rate: %f\n", missRate);
 	printf("Done\n");
 	return 0;
 }
