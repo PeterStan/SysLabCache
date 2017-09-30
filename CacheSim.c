@@ -4,8 +4,8 @@
 
 
 //takes trace file and returns hit rate
-float readTrace(char *file){
-	float hits, accesses;
+double readTrace(char *file){
+	double hits, accesses;
 	hits = 0;accesses = 0;
 	 
 	unsigned int address;
@@ -103,13 +103,13 @@ int buildCache(){
 	Cache.blockOffsetFieldLength = offsetLength();
 	Cache.tagFieldLength = (32 - Cache.setIndexFieldLength - Cache.blockOffsetFieldLength);
 	Cache.MRU = 0;
+	int i,j;
 
 	Cache.tagArray = (unsigned int **) malloc(Cache.kSetAss*sizeof(unsigned int*));
-	for (int i=0; i < Cache.kSetAss; i++) *(Cache.tagArray + i) = (unsigned int*) malloc(Cache.wSetWay*sizeof(unsigned int));
+	for (i=0; i < Cache.kSetAss; i++) *(Cache.tagArray + i) = (unsigned int*) malloc(Cache.wSetWay*sizeof(unsigned int));
 	Cache.lruArray = (int **) malloc(Cache.kSetAss*sizeof(unsigned int*));
-	for (int i=0; i < Cache.kSetAss; i++) *(Cache.lruArray + i) = (unsigned int*) malloc(Cache.wSetWay*sizeof(unsigned int));
+	for (i=0; i < Cache.kSetAss; i++) *(Cache.lruArray + i) = (unsigned int*) malloc(Cache.wSetWay*sizeof(unsigned int));
 	
-	int i,j;
 	for(i = 0; i<Cache.kSetAss; i++){
 		for(j = 0; j<Cache.wSetWay; j++){
 			*((int *)Cache.lruArray+(i*Cache.wSetWay)+j) = -1;

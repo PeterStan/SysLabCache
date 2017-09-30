@@ -25,7 +25,7 @@ int tagBits();///works well
 int hitWay();
 int updateOnHit();//done, Not tested
 int updateOnMiss();
-float readTrace(char *file); //done, and tested
+double readTrace(char *file); //done, and tested
 int accessCache();
 int buildCache(); //done, kinda tested
 int findLRU(int set); //done, kinda tested
