@@ -12,7 +12,7 @@ float readTrace(char *file){
 	fp = fopen(file, "r+");
 
 	while( fscanf(fp, "%X", &address) != EOF){
-		printf("Address: %d, Tag: %d, Set: %d\n",address, tagBits(address), whichSet(address));
+		printf("Address: %d, Tag: %d, Set: %d\t",address, tagBits(address), whichSet(address));
 		hits += accessCache(address);
 		Cache.MRU++;
 		accesses++;
@@ -82,14 +82,15 @@ int accessCache(unsigned int address){
 
 	setIndex = whichSet(address);
 	way = hitWay(address);
+	printf("Way: %d, Set: %d\n", way, setIndex);
 
 	if(way >= 0){
 		printf("Hit\n");
-		r = updateOnHit();
+		r = updateOnHit(address);
 	}
 	else{
 		printf("Miss\n");
-		r = updateOnMiss();
+		r = updateOnMiss(address);
 	}
 	return r;
 }
@@ -169,7 +170,7 @@ int hitWayTest(){
 }
 
 //Updates the tagArray and lruArray upon a hit.  This function is only called on a cache hit
-int updateOnHit(int address){
+int updateOnHit(unsigned int address){
 	//update LRU only
 	accessLRUArray(whichSet(address), getWayIndex(address), 1);
 	printf("Updated Hit at: %d\n", address);
@@ -184,8 +185,9 @@ int updateOnMiss(unsigned int address){
 	printf("Updating Miss at: %X\n", address);
 
 
-	way = findLRU(address);
+	
 	set = whichSet(address);
+	way = findLRU(set);
 
 	accessLRUArray(set,way,1);
 	accessTagArray(set,way, tagBits(address));
@@ -194,16 +196,16 @@ int updateOnMiss(unsigned int address){
 }
 
 //returns way of the least recently used place in the cache
-int findLRU(unsigned int address){
-	int lowest,lWay, set;
+int findLRU(int set){
+	int lowest,lWay;
 	lowest = 0;lWay = 0;
-	set = whichSet(address);
+	printf("SET:%d\n", set);
 
 	for(int i = 0; i < Cache.wSetWay; i++){
 
 		if(*((int *)Cache.lruArray+(set*Cache.wSetWay)+i) < lowest){
 			lWay = i;
-			lowest = *((int *)Cache.lruArray+(whichSet(address)*Cache.wSetWay)+i);
+			lowest = *((int *)Cache.lruArray+(set*Cache.wSetWay)+i);
 			//printf("Lowest: %d\n", lWay);
 		}
 		printf("Set: %d, L Way: %d, Lowest: %d\n", set, lWay, lowest);
