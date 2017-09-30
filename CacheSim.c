@@ -3,7 +3,7 @@
 
 
 
-//takes trace file and returns hit rate
+//takes trace file and returns miss rate
 
 double readTrace(char *file){
 	double hits, accesses;
@@ -13,8 +13,9 @@ double readTrace(char *file){
 	FILE *fp;
 	fp = fopen(file, "r+");
 
+		printf("Reading Trace\n");
 	while( fscanf(fp, "%X", &address) != EOF){
-		printf("Address: %d, Tag: %d, Set: %d\t",address, tagBits(address), whichSet(address));
+		printf("Address: %d, Tag: %d, Set: %d\n",address, tagBits(address), whichSet(address));
 		hits += accessCache(address);
 		printf("Hits:%f, Accesses: %f\n", hits, accesses);
 		Cache.MRU++;
@@ -29,10 +30,10 @@ double readTrace(char *file){
 int accessTagArray(int setIndex, int wayIndex, int t){
 
 	if(t == -1){
-		t = (*((int *)Cache.tagArray+setIndex*Cache.wSetWay+wayIndex));
+		t = (*((int *)Cache.tagArray+setIndex*Cache.kSetAss+wayIndex));
 	}
 	else{
-		*((int *)Cache.tagArray+(setIndex*Cache.wSetWay)+wayIndex) = t;
+		*((int *)Cache.tagArray+(setIndex*Cache.kSetAss)+wayIndex) = t;
 	}
 	return t;
 }
@@ -41,11 +42,11 @@ int accessTagArray(int setIndex, int wayIndex, int t){
 int accessLRUArray(int setIndex, int wayIndex, int t){
 
 	if(t == -1){
-		return (*((int *)Cache.lruArray+setIndex*Cache.wSetWay+wayIndex));
+		return (*((int *)Cache.lruArray+setIndex*Cache.kSetAss+wayIndex));
 	}
 	else if(t == 1){
-		(*((int *)Cache.lruArray+setIndex*Cache.wSetWay+wayIndex)) = Cache.MRU;
-		return (*((int *)Cache.lruArray+setIndex*Cache.wSetWay+wayIndex));
+		(*((int *)Cache.lruArray+setIndex*Cache.kSetAss+wayIndex)) = Cache.MRU;
+		return (*((int *)Cache.lruArray+setIndex*Cache.kSetAss+wayIndex));
 	}
 	return 0;
 }
@@ -81,6 +82,8 @@ int whichSet(unsigned int address){
 //returns 0 or 1 based on wether it is a hit or miss
 int accessCache(unsigned int address){
 	int way, setIndex, r;
+	printf("Accessing Cache\n");
+
 
 	setIndex = whichSet(address);
 	way = hitWay(address);
@@ -204,11 +207,11 @@ int findLRU(int set){
 	lowest = 0;lWay = 0;
 
 	int i;
-	for(i = 0; i < Cache.wSetWay; i++){
+	for(i = 0; i < Cache.kSetAss; i++){
 
-		if(*((int *)Cache.lruArray+(set*Cache.wSetWay)+i) < lowest){
+		if(*((int *)Cache.lruArray+(set*Cache.kSetAss)+i) < lowest){
 			lWay = i;
-			lowest = *((int *)Cache.lruArray+(set*Cache.wSetWay)+i);
+			lowest = *((int *)Cache.lruArray+(set*Cache.kSetAss)+i);
 			//printf("Lowest: %d\n", lWay);
 		}
 		//printf("Set: %d, L Way: %d, Lowest: %d\n", set, lWay, lowest);
