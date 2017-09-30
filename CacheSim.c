@@ -4,6 +4,7 @@
 
 
 //takes trace file and returns hit rate
+
 double readTrace(char *file){
 	double hits, accesses;
 	hits = 0;accesses = 0;
@@ -19,8 +20,6 @@ double readTrace(char *file){
 		Cache.MRU++;
 		accesses++;
 	}
-	hits = (double)hits;
-	accesses = (double)accesses;
 	fclose(fp);
 	printf("Trace Read\n");
 	return (hits/accesses);
