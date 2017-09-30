@@ -4,11 +4,8 @@
 
 
 //takes trace file and returns hit rate
-<<<<<<< Updated upstream
+
 double readTrace(char *file){
-=======
-float readTrace(char *file){
->>>>>>> Stashed changes
 	double hits, accesses;
 	hits = 0;accesses = 0;
 	 
