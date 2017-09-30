@@ -22,7 +22,7 @@ double readTrace(char *file){
 	}
 	fclose(fp);
 	printf("Trace Read\n");
-	return (hits/accesses);
+	return 1 - (hits/accesses);
 }
 
 //sets tag in array to t, or if t is -1 return tag at that index
@@ -267,7 +267,7 @@ int main(int argc, char *argv[]){
 
 
 
-	printf("Hit Rate: %f\n", hitRate);
+	printf("Miss Rate: %f\n", hitRate);
 	printf("Done\n");
 	return 0;
 }
