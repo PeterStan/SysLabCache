@@ -150,7 +150,6 @@ int updateOnHit(unsigned int address, int way){
 	return 1;
 }
 
-
 // Updates the tagArray and lruArray upon a miss.  This function is only called on a cache miss
 int updateOnMiss(unsigned int address){
 	int way,set;
