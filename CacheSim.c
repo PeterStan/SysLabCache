@@ -12,7 +12,8 @@ float readTrace(char *file){
 	fp = fopen(file, "r+");
 
 	while( fscanf(fp, "%X", &address) != EOF){
-		hits += accessCache(address);printf("%X\n", address);
+		printf("Address: %d, Tag: %d, Set: %d\n",address, tagBits(address), whichSet(address));
+		hits += accessCache(address);
 		Cache.MRU++;
 		accesses++;
 	}
@@ -179,30 +180,33 @@ int updateOnHit(int address){
 // Updates the tagArray and lruArray upon a miss.  This function is only called on a cache miss
 int updateOnMiss(unsigned int address){
 	int way,set;
+	
+	printf("Updating Miss at: %X\n", address);
+
+
 	way = findLRU(address);
 	set = whichSet(address);
-
 
 	accessLRUArray(set,way,1);
 	accessTagArray(set,way, tagBits(address));
 
-	printf("Updated Miss at: %d\n", address);
 	return 0;
 }
 
 //returns way of the least recently used place in the cache
 int findLRU(unsigned int address){
 	int lowest,lWay, set;
-	lowest = 0;
+	lowest = 0;lWay = 0;
 	set = whichSet(address);
 
 	for(int i = 0; i < Cache.wSetWay; i++){
-		printf("Set: %d, Way: %d, Lowest: %d\n", set, i, lowest);
+
 		if(*((int *)Cache.lruArray+(set*Cache.wSetWay)+i) < lowest){
 			lWay = i;
 			lowest = *((int *)Cache.lruArray+(whichSet(address)*Cache.wSetWay)+i);
 			//printf("Lowest: %d\n", lWay);
 		}
+		printf("Set: %d, L Way: %d, Lowest: %d\n", set, lWay, lowest);
 	}
 
 	printf("Found LRU\n");
@@ -247,10 +251,6 @@ int main(int argc, char *argv[]){
 	printf("kSetAss: %d, lSetLength: %d, cSetSizeBytes: %d, wSetWay: %d\n", Cache.kSetAss, Cache.lSetLength, Cache.cSetSizeBytes, Cache.wSetWay);
 
 	buildCache();
-<<<<<<< HEAD
-=======
-	
->>>>>>> 8a764f7c798c47b7d705f9c419d7596f665934f5
 
 
 	hitRate = readTrace(argv[4]);
