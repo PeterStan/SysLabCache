@@ -1,10 +1,8 @@
 #include "Cache.h"
 //#include "CacheTest.c"
 
-//peterChange
 
 //takes trace file and returns hit rate
-
 double readTrace(char *file){
 	double hits, accesses;
 	hits = 0;accesses = 0;
@@ -50,11 +48,6 @@ int accessLRUArray(int setIndex, int wayIndex, int t){
 	return 0;
 }
 
-int getWayIndex(unsigned int address){
-	int mask = ~(0xFFFFFFFF << Cache.blockOffsetFieldLength);
-	return address & mask;
-}
-
 int lg(int x){//returns log base 2 of x, or -1 
 	int i;
 	for(i = 1; (1<<i) <= x; i++)
@@ -64,19 +57,10 @@ int lg(int x){//returns log base 2 of x, or -1
 
 //Outputs the cache set in which the address falls
 int whichSet(unsigned int address){
-	int mask = ~(0xFFFFFFFF << Cache.setIndexFieldLength); 
-  	address = address >> Cache.blockOffsetFieldLength; 
+	int mask = ~(0xFFFFFFFF << Cache.setIndexFieldLength); //generate mask for unwanted tag bits
+  	address = address >> Cache.blockOffsetFieldLength; //shift to eliminate offset bits
   	return address & mask;
 }
-
-/*int whichSetTest(){
-	int address1 = 0b10110011010111010000000000000111;
-	printf("%d\n", Cache.setIndexFieldLength);
-	assert(Cache.setIndexFieldLength == 16);
-	assert(Cache.blockOffsetFieldLength == 3);
-	assert(whichSet(address1)==40960);
-	return 0;
-}*/
 
 //returns 0 or 1 based on wether it is a hit or miss
 int accessCache(unsigned int address){
@@ -96,7 +80,6 @@ int accessCache(unsigned int address){
 	}
 	return r;
 }
-
 
 int buildCache(){
 	Cache.setIndexFieldLength = setIndexLength();
@@ -123,40 +106,27 @@ int buildCache(){
 
 //Outputs the number of bits in the set index  field of theaddress
 int setIndexLength(){
-	int setLength = lg(Cache.wSetWay);
-	int offsetSize = lg(Cache.kSetAss);
-	assert((32 - setLength - offsetSize) > 0);
+	int setLength = lg(Cache.wSetWay);//logbase2 of # of sets
+	int offsetSize = lg(Cache.kSetAss);//logbase2 of # of ways per set
+	assert((32 - setLength - offsetSize) > 0);//make sure the index and offset sizes dont exceed 32
 	return setLength;
-}
-
-int setIndexLengthTest(){
-	return 0;
 }
 
 //Outputs  the  number  of  bits  in  the  line  o sbbet field  of  the address
 int offsetLength(){
+	//same as setIndexLength() but output the offset instead
 	int setLength = lg(Cache.wSetWay);
 	int offsetSize = lg(Cache.kSetAss);
 	assert((32 - setLength - offsetSize) > 0);
 	return offsetSize; 
 }
 
-int offsetLengthTest(){
-	int length1 = offsetLength(512, 8, 16);
-	//assert(length1 == 9);
-	return 0;
-}
-
 //Outputs the tag bits associated with the address
 int tagBits(unsigned int address){	
 	int shift = Cache.blockOffsetFieldLength + Cache.setIndexFieldLength;
 	assert(shift < 32); 
-	address = address >> (shift);
+	address = address >> (shift); //shift right by setindex and offset bits to retrieve the tag
 	return address;
-}
-
-int tagBitsTest(){
-	return 0;
 }
 
 // If there is a hit, this outputs the cache way in which the accessed line can be found; 
@@ -167,7 +137,7 @@ int hitWay(unsigned int address){
 	int wayIndex;
 	for(wayIndex = 0; wayIndex < Cache.kSetAss; wayIndex++){
 		if(accessTagArray(setIndex, wayIndex, -1) == tag) return wayIndex;
-	}	
+	}	//loop checks each way in a set, if the tag matches, returns the way
 	return -1;
 }
 
@@ -223,7 +193,7 @@ int findLRU(int set){
 
 }
 
-int printLRUArray(){
+/*int printLRUArray(){
 	int i;
 	int j;
 	for(i = 0; i<Cache.wSetWay; i++){
@@ -246,7 +216,7 @@ int printTagArray(){
 		printf("\n");
 	}
 	return 0;
-}
+}*/
  
 	//argv[1] = set associativity
 	//argv[2] = line size in bytes
