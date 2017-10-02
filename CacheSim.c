@@ -151,9 +151,9 @@ int buildCache(){
 	for (i=0; i < Cache.wSetWay; i++){
 		*(Cache.tagArray + i) = (unsigned int*) malloc(Cache.kSetAss*sizeof(unsigned int));
 	}
-	Cache.lruArray = (int **) malloc(Cache.wSetWay*sizeof(unsigned int*));
+	Cache.lruArray = (int **) malloc(Cache.wSetWay*sizeof(int*));
 	for (i=0; i < Cache.wSetWay; i++){ 
-		*(Cache.lruArray + i) = (unsigned int*) malloc(Cache.kSetAss*sizeof(unsigned int));
+		*(Cache.lruArray + i) = (int*) malloc(Cache.kSetAss*sizeof(int));
 	}
 
 	//intializing all values in the LRU array to -1
