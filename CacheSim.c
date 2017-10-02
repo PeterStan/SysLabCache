@@ -18,7 +18,20 @@ int **lruArray;
 
 struct cache Cache;
 
-//#include "CacheTest.c"
+int whichSet(unsigned int address);
+int setIndexLength();
+int offsetLength();
+int tagBits(unsigned int address);
+int hitWay(unsigned int address);
+int updateOnHit(unsigned int address, int way);
+int updateOnMiss(unsigned int address);
+double readTrace(char *file);
+int accessTagArray(int setIndex, int wayIndex, int t);
+int accessLRUArray(int setIndex, int wayIndex, int t);
+int lg(int x);
+int accessCache(unsigned int address);
+int buildCache();
+int findLRU(int set);
 
 //Outputs the cache set in which the address falls
 int whichSet(unsigned int address){
