@@ -1,4 +1,23 @@
-#include "Cache.h"
+#include <stdio.h>
+#include <assert.h>
+#include <stdlib.h>
+
+
+struct cache{
+int MRU;
+int kSetAss;
+int lSetLength;
+int cSetSizeBytes;
+int wSetWay;
+int tagFieldLength;
+int setIndexFieldLength;
+int blockOffsetFieldLength;
+unsigned int **tagArray; 
+int **lruArray;
+};
+
+struct cache Cache;
+
 //#include "CacheTest.c"
 
 //Outputs the cache set in which the address falls
@@ -85,7 +104,7 @@ double readTrace(char *file){
 //sets tag in array to t, or if t is -1 return tag at that index
 //called by hitWay() and updateOnMiss()
 int accessTagArray(int setIndex, int wayIndex, int t){
-	assert(setIndex<=Cache.wSetWay); assert(wayIndex<=Cache.kSetAss);
+	//assert(setIndex<=Cache.wSetWay); assert(wayIndex<=Cache.kSetAss);
 
 	if(t == -1){
 		t = (*((int *)Cache.tagArray+setIndex*Cache.kSetAss+wayIndex));
@@ -99,7 +118,7 @@ int accessTagArray(int setIndex, int wayIndex, int t){
 //increments Lru value at position if 1, or just returns value if -1
 //called by updateOnMiss() and updateOnHit()
 int accessLRUArray(int setIndex, int wayIndex, int t){
-	assert(setIndex<=Cache.wSetWay); assert(wayIndex<=Cache.kSetAss);
+	//assert(setIndex<=Cache.wSetWay); assert(wayIndex<=Cache.kSetAss);
 
 	if(t == -1){
 		return (*((int *)Cache.lruArray+setIndex*Cache.kSetAss+wayIndex));
